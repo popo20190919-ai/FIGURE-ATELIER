@@ -422,6 +422,14 @@ a { text-decoration: none; color: inherit; }
     font-weight: 500;
 }
 .gen-btn:hover:not(:disabled) { background: #e60073; }
+.gen-btn.is-offline {
+    background: var(--chip-grey);
+    color: #FFFFFF;
+    opacity: 1;
+    cursor: not-allowed;
+    font-size: 22px;
+}
+.gen-btn.is-offline:hover { background: var(--chip-grey); }
 
 .reset-btn {
     left: 1109px;

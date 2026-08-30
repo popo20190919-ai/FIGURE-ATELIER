@@ -333,14 +333,36 @@ function setSvcWarn(show) {
     if (el) el.hidden = !show;
 }
 
+function setGenAvailable(ok) {
+    state.serviceOk = ok;
+    const btn = $('genBtn');
+    if (ok) {
+        btn.disabled = false;
+        btn.classList.remove('is-offline');
+        btn.textContent = '生成造型';
+        setSvcWarn(false);
+        return;
+    }
+    btn.disabled = true;
+    btn.classList.add('is-offline');
+    btn.textContent = 'AI 生成 · 不可用';
+    setSvcWarn(true);
+    const body = $('svcWarnBody');
+    if (body) {
+        const local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        body.innerHTML = local
+            ? '当前普通浏览器未获得 AI 图片服务的访问授权。<br>请在 <b>TRAE 内置浏览器 / 预览</b> 中打开 <b>localhost:8923/studio.html</b> 使用生成功能。'
+            : '线上版本仅供浏览素材与搭配预览；AI 生图依赖公司内网服务，公网环境无法访问。<br>如需生成造型，请在 TRAE 内置浏览器 / 预览中打开本地 <b>localhost:8923/studio.html</b>。';
+    }
+}
+
 function failGenerate(token, reason) {
     if (token !== state.genToken) return;
     $('overlay').classList.remove('visible');
     $('genBtn').disabled = false;
     state.generating = false;
     if (reason === 'auth') {
-        state.serviceOk = false;
-        setSvcWarn(true);
+        setGenAvailable(false);
         alert('生成失败：当前浏览器无法访问 AI 图片服务（缺少 TRAE 内置浏览器的访问授权）。\n\n请在 TRAE 内置浏览器 / 预览中打开 localhost:8923/studio.html 使用生成功能。');
     } else {
         alert('生成失败：图像服务繁忙或暂时不可用，请稍后重试。');
@@ -386,16 +408,8 @@ function loadGeneratedImage(url, prompt, token, attempt, fastFails) {
 
 function probeService() {
     const img = new Image();
-    img.onload = () => {
-        if (img.naturalWidth < 1800) {
-            state.serviceOk = true;
-            setSvcWarn(false);
-        }
-    };
-    img.onerror = () => {
-        state.serviceOk = false;
-        setSvcWarn(true);
-    };
+    img.onload = () => setGenAvailable(true);
+    img.onerror = () => setGenAvailable(false);
     img.src = `${IMG('a plain light gray solid color test image', 'square')}&_probe=${Date.now()}`;
 }
 
@@ -490,6 +504,7 @@ function handleItemClick(tab, id, kind) {
 
 function init() {
     loadUploads();
+    $('genBtn').disabled = true;
     probeService();
 
     const params = new URLSearchParams(location.search);
