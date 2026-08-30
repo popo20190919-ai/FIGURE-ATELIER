@@ -99,7 +99,7 @@
     (function () {
         var DESIGN_W = 1920, DESIGN_H = 1068;
         function fit() {
-            var s = window.innerWidth / DESIGN_W;
+            var s = Math.min(window.innerWidth / DESIGN_W, 1);
             var stage = document.getElementById('stage');
             stage.style.transform = 'translateX(-50%) scale(' + s + ')';
             stage.style.left = '50%';
