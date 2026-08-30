@@ -32,7 +32,8 @@ html, body {
     font-family: var(--font-sans);
     letter-spacing: -0.09em;
     color: var(--ink);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 button { font-family: inherit; cursor: pointer; }

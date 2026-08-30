@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&family=Inter:wght@400;500;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="studio.css?v=3">
+    <link rel="stylesheet" href="studio.css?v=4">
 </head>
 <body>
 
@@ -99,12 +99,13 @@
     (function () {
         var DESIGN_W = 1920, DESIGN_H = 1068;
         function fit() {
-            var s = Math.min(window.innerWidth / DESIGN_W, window.innerHeight / DESIGN_H);
+            var s = window.innerWidth / DESIGN_W;
             var stage = document.getElementById('stage');
             stage.style.transform = 'translateX(-50%) scale(' + s + ')';
             stage.style.left = '50%';
             stage.style.marginLeft = '0';
-            stage.style.top = ((window.innerHeight - DESIGN_H * s) / 2) + 'px';
+            stage.style.top = '0px';
+            document.body.style.minHeight = Math.round(DESIGN_H * s) + 'px';
         }
         window.addEventListener('resize', fit);
         fit();
