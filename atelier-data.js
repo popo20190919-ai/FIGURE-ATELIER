@@ -198,7 +198,12 @@ const CAST = [
         en: 'PONYTAIL WAISTCOAT',
         gender: 'female',
         img: IMG(`${FRONTVIEW}, young East Asian female model with black hair tied in a high ponytail, wearing a dark grey sleeveless mandarin-collar waistcoat with light blue side panels and metal side buckles over a light blue ruffled-collar shirt, black asymmetric draped mini skirt, grey slouchy mid-calf socks, black pointed-toe mary-jane heels`, 'portrait_4_3'),
-        identity: 'a young East Asian woman in her early twenties with black hair tied in a high ponytail, fair skin, oval face, slender tall figure'
+        identity: 'a young East Asian woman in her early twenties with black hair tied in a high ponytail, fair skin, oval face, slender tall figure',
+        wear: {
+            outfit: 'dark grey sleeveless mandarin-collar waistcoat with light blue side panels and metal side buckles over a light blue ruffled-collar shirt, black asymmetric draped mini skirt, grey slouchy mid-calf socks',
+            shoes: 'black pointed-toe mary-jane heels',
+            accessory: null
+        }
     },
     {
         id: 'C2',
@@ -206,7 +211,12 @@ const CAST = [
         en: 'BLUE SHIRT BOY',
         gender: 'male',
         img: IMG(`${FRONTVIEW}, young East Asian male model with black wavy medium-length hair under a black baseball cap, wearing black eyeglasses, oversized light blue long-sleeve shirt, black skinny tie, black high-waisted pleated knee-length shorts, two black leather belts with a black belt pouch, black mid socks, black monk-strap leather shoes`, 'portrait_4_3'),
-        identity: 'a young East Asian man in his early twenties with black wavy medium-length hair, fair skin, wearing black eyeglasses, slim tall figure'
+        identity: 'a young East Asian man in his early twenties with black wavy medium-length hair, fair skin, wearing black eyeglasses, slim tall figure',
+        wear: {
+            outfit: 'oversized light blue long-sleeve shirt, black skinny tie, black high-waisted pleated knee-length shorts, two black leather belts with a black belt pouch, black mid-calf socks',
+            shoes: 'black monk-strap leather shoes',
+            accessory: null
+        }
     },
     {
         id: 'C3',
@@ -214,7 +224,12 @@ const CAST = [
         en: 'OLIVE BOB',
         gender: 'female',
         img: IMG(`${FRONTVIEW}, young East Asian female model with a short black bob haircut and blunt bangs, wearing an olive green hourglass blazer with exaggerated structured wide shoulders over a light blue shirt and tie, burgundy shorts, long light blue gloves, light blue knee-high socks, black pointed-toe stiletto heels`, 'portrait_4_3'),
-        identity: 'a young East Asian woman in her early twenties with a short black bob haircut and blunt bangs, fair skin, small face, slender figure'
+        identity: 'a young East Asian woman in her early twenties with a short black bob haircut and blunt bangs, fair skin, small face, slender figure',
+        wear: {
+            outfit: 'olive green hourglass blazer with exaggerated structured wide shoulders over a light blue shirt and tie, burgundy shorts, long light blue gloves, light blue knee-high socks',
+            shoes: 'black pointed-toe stiletto high heels',
+            accessory: null
+        }
     },
     {
         id: 'C4',
@@ -222,7 +237,12 @@ const CAST = [
         en: 'JERSEY SHADES',
         gender: 'female',
         img: 'images/people/people-04-front.jpg',
-        identity: 'a young woman in her early twenties with long straight center-parted black hair, warm tan skin, sharp facial features, wearing narrow black sunglasses, slender tall figure'
+        identity: 'a young woman in her early twenties with long straight center-parted black hair, warm tan skin, sharp facial features, wearing narrow black sunglasses, slender tall figure',
+        wear: {
+            outfit: 'navy and burgundy color-block V-neck cropped football jersey with grey shoulder panels, grey asymmetric pleated mini skirt with a black leather belt, white ribbed crew socks',
+            shoes: 'black chunky leather loafers with thick platform soles',
+            accessory: null
+        }
     },
     {
         id: 'C5',
@@ -230,7 +250,12 @@ const CAST = [
         en: 'GREY SUIT LACE',
         gender: 'female',
         img: 'images/people/people-05-front.jpg',
-        identity: 'a young East Asian woman in her early twenties with long straight center-parted dark reddish-brown hair, fair skin, oval face, red lips, slender tall figure'
+        identity: 'a young East Asian woman in her early twenties with long straight center-parted dark reddish-brown hair, fair skin, oval face, red lips, slender tall figure',
+        wear: {
+            outfit: 'oversized grey tailored blazer worn open over a cream sheer lace camisole with long black lace ribbon ties hanging down the front, matching grey wide-leg tailored trousers, black choker necklace',
+            shoes: 'black pointed-toe leather heels',
+            accessory: null
+        }
     },
     {
         id: 'C6',
@@ -238,7 +263,12 @@ const CAST = [
         en: 'BLACK DRESS BOOTS',
         gender: 'female',
         img: 'images/library/lib_cast_1.png',
-        identity: 'a young woman in her early twenties with long straight center-parted black hair, fair skin, oval face, gold hoop earrings, slender tall figure'
+        identity: 'a young woman in her early twenties with long straight center-parted black hair, fair skin, oval face, gold hoop earrings, slender tall figure',
+        wear: {
+            outfit: 'fitted black spaghetti-strap bodycon mini slip dress',
+            shoes: 'slouchy black leather knee-high pointed-toe boots',
+            accessory: 'wearing gold hoop earrings'
+        }
     },
     {
         id: 'C7',
@@ -246,7 +276,12 @@ const CAST = [
         en: 'BLONDE CUTOUT',
         gender: 'female',
         img: 'images/library/lib_cast_7.png',
-        identity: 'a young woman in her early twenties with long straight platinum blonde hair, pale skin, sharp facial features, tall slender figure'
+        identity: 'a young woman in her early twenties with long straight platinum blonde hair, pale skin, sharp facial features, tall slender figure',
+        wear: {
+            outfit: 'black ribbed turtleneck long-sleeve bodysuit with a diamond fishnet cutout at the chest and side waist cutouts, black baggy wide-leg cargo trousers with a black leather belt',
+            shoes: 'black chunky platform leather shoes',
+            accessory: null
+        }
     },
     {
         id: 'C8',
@@ -254,7 +289,12 @@ const CAST = [
         en: 'OLIVE LACE SET',
         gender: 'female',
         img: 'images/library/lib_cast_8.png',
-        identity: 'a young woman in her early twenties with shoulder-length platinum blonde hair, pale skin, delicate facial features, layered silver necklaces, slender figure'
+        identity: 'a young woman in her early twenties with shoulder-length platinum blonde hair, pale skin, delicate facial features, layered silver necklaces, slender figure',
+        wear: {
+            outfit: 'olive green lace camisole crop top with crisscross lace-up front and hanging tie strings, matching olive green ruched draped midi skirt with side ruching',
+            shoes: 'olive green leather ankle boots',
+            accessory: 'wearing layered silver chain necklaces'
+        }
     }
 ];
 

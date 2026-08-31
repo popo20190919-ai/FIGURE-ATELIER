@@ -88,6 +88,24 @@ function identityPromptText() {
     return IDENTITY_DESC;
 }
 
+function defaultWear() {
+    const empty = { outfit: null, shoes: null, accessory: null };
+    const cast = identityCast();
+    if (cast && cast.wear) return cast.wear;
+    const look = identityLook();
+    if (look) {
+        const o = OUTFITS.find((x) => x.name === look.outfit);
+        const s = SHOES.find((x) => x.name === look.shoes);
+        const a = ACCESSORIES.find((x) => x.name === look.accessory);
+        return {
+            outfit: o ? OUTFIT_PHRASES[o.id] : null,
+            shoes: s ? SHOE_PHRASES[s.id] : null,
+            accessory: a ? ACCESSORY_PHRASES[a.id] : null
+        };
+    }
+    return empty;
+}
+
 function renderTabs() {
     document.querySelectorAll('.lib-tab').forEach((tab) => {
         tab.classList.toggle('active', tab.dataset.tab === state.tab);
@@ -310,17 +328,23 @@ function buildPrompt() {
         posePhrase
     ];
 
+    const dw = defaultWear();
     if (outfit) {
         parts.push(`wearing ${OUTFIT_PHRASES[outfit.id]}`);
+    } else if (dw.outfit) {
+        parts.push(`wearing ${dw.outfit}`);
     } else {
         parts.push('keep the exact same original outfit and clothing as worn in the identity reference, do not change or restyle the clothes');
     }
     if (shoes) {
         parts.push(SHOE_PHRASES[shoes.id]);
+    } else if (dw.shoes) {
+        parts.push(dw.shoes);
     } else {
         parts.push('keep the same original footwear as in the identity reference');
     }
     if (accessory) parts.push(ACCESSORY_PHRASES[accessory.id]);
+    else if (dw.accessory) parts.push(dw.accessory);
 
     const userText = $('promptInput').value.trim();
     if (userText) parts.push(userText);
