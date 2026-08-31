@@ -33,10 +33,10 @@ const state = {
     mode: 'identity',
     identity: { kind: 'cast', id: 'C4' },
     sel: {
-        topId: 'O1',
+        topId: null,
         bottomId: null,
-        shoesId: 'S1',
-        accessoryId: 'A3',
+        shoesId: null,
+        accessoryId: null,
         poseId: null
     },
     gen: null,
@@ -510,7 +510,7 @@ function resetStudio() {
     state.mode = 'identity';
     state.gen = null;
     state.history = [];
-    state.sel = { topId: 'O1', bottomId: null, shoesId: 'S1', accessoryId: 'A3', poseId: null };
+    state.sel = { topId: null, bottomId: null, shoesId: null, accessoryId: null, poseId: null };
     $('promptInput').value = '';
     updateStage();
 }
@@ -575,8 +575,6 @@ function init() {
         state.identity = { kind: 'cast', id: lookId };
     } else if (lookId && LOOKS.some((l) => l.id === lookId)) {
         state.identity = { kind: 'look', id: lookId };
-        const outfitByLook = OUTFITS.find((o) => o.look === lookId);
-        if (outfitByLook) state.sel.topId = outfitByLook.id;
     }
     const libTab = params.get('lib');
     if (['person', 'top', 'bottom', 'shoes', 'accessory', 'pose'].includes(libTab)) state.tab = libTab;
