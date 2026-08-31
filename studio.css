@@ -176,6 +176,28 @@ a { text-decoration: none; color: inherit; }
     color: #A2A2A2;
 }
 
+.upload-desc {
+    position: absolute;
+    left: 28px;
+    top: 158px;
+    width: 375px;
+    height: 54px;
+    background: #FFFFFF;
+    border: 1px solid #C5C5C5;
+    border-radius: 14px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    outline: none;
+    resize: none;
+    overflow-y: auto;
+}
+.upload-desc:focus { border-color: var(--pink); }
+.upload-desc::placeholder { color: #B5B5B5; }
+
 .lp-hr {
     position: absolute;
     left: 27.2px;

@@ -86,6 +86,8 @@ function identityPromptText() {
     if (cast && cast.identity) return cast.identity;
     const look = identityLook();
     if (look && IDENTITY_PROMPTS[look.id]) return IDENTITY_PROMPTS[look.id];
+    const item = identityItem();
+    if (item && item.desc && item.desc.trim()) return item.desc.trim();
     return IDENTITY_DESC;
 }
 
@@ -234,6 +236,9 @@ function updateChips() {
 }
 
 function updateInfo() {
+    const descTa = $('uploadDesc');
+    descTa.hidden = true;
+    $('lookDesc').hidden = false;
     if (state.mode === 'gen' && state.gen) {
         $('lookNo').textContent = 'AI';
         $('lookName').textContent = 'AI 生成造型';
@@ -255,7 +260,9 @@ function updateInfo() {
         $('lookNo').textContent = '我的';
         $('lookName').textContent = item.name;
         $('lookEn').textContent = 'MY IDENTITY';
-        $('lookDesc').textContent = '已上传的人物照片作为身份母图展示。AI 将以提示词描述的人物特征为基准生成，可在下方提示框补充外貌特征（发型、发色等）。';
+        $('lookDesc').hidden = true;
+        descTa.hidden = false;
+        descTa.value = item.desc || '';
         return;
     }
     if (look) {
@@ -336,25 +343,27 @@ function buildPrompt() {
     ];
 
     const dw = defaultWear();
+    const upItem = identityItem();
+    const hasUploadDesc = !!(upItem && upItem.desc && upItem.desc.trim());
     if (top) {
         parts.push(`wearing ${TOP_PHRASES[top.id]}`);
     } else if (dw.top) {
         parts.push(`wearing ${dw.top}`);
-    } else {
+    } else if (!hasUploadDesc) {
         parts.push('keep the exact same original top and outfit as worn in the identity reference, do not change or restyle the clothes');
     }
     if (bottom) {
         parts.push(`paired with ${BOTTOM_PHRASES[bottom.id]}`);
     } else if (dw.bottom) {
         parts.push(`paired with ${dw.bottom}`);
-    } else {
+    } else if (!hasUploadDesc) {
         parts.push('keep the same original bottoms as in the identity reference');
     }
     if (shoes) {
         parts.push(SHOE_PHRASES[shoes.id]);
     } else if (dw.shoes) {
         parts.push(dw.shoes);
-    } else {
+    } else if (!hasUploadDesc) {
         parts.push('keep the same original footwear as in the identity reference');
     }
     if (accessory) parts.push(ACCESSORY_PHRASES[accessory.id]);
@@ -526,7 +535,8 @@ function addUpload(dataUrl, name) {
     const item = {
         id: 'U' + Date.now() + Math.random().toString(16).slice(2, 6),
         name: name || '我的人物',
-        img: dataUrl
+        img: dataUrl,
+        desc: ''
     };
     state.uploads.unshift(item);
     persistUploads();
@@ -537,8 +547,10 @@ function handleFiles(files) {
     Array.from(files).forEach((file, i) => {
         readImageFile(file, (dataUrl) => {
             const item = addUpload(dataUrl, file.name.replace(/\.[^.]+$/, '') || '我的人物');
-            if (i === 0) selectIdentity(item.id, 'upload');
-            else updateStage();
+            if (i === 0) {
+                selectIdentity(item.id, 'upload');
+                setTimeout(() => { const ta = $('uploadDesc'); if (ta && !ta.hidden) ta.focus(); }, 60);
+            } else updateStage();
         });
     });
 }
@@ -614,6 +626,14 @@ function init() {
             }
         });
     }
+
+    $('uploadDesc').addEventListener('input', (e) => {
+        const item = identityItem();
+        if (item) {
+            item.desc = e.target.value;
+            persistUploads();
+        }
+    });
 
     $('libUploadBtn').addEventListener('click', () => $('libFileInput').click());
     $('libFileInput').addEventListener('change', (e) => {
