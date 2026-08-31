@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&family=Inter:wght@400;500;700&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="studio.css?v=9">
+    <link rel="stylesheet" href="studio.css?v=10">
 </head>
 <body>
 
@@ -28,7 +28,10 @@
         <div class="lp-name" id="lookName">球衣墨镜</div>
         <div class="lp-en" id="lookEn">JERSEY SHADES</div>
         <p class="lp-desc" id="lookDesc" style="top:165.1px"></p>
-        <textarea class="upload-desc" id="uploadDesc" hidden placeholder="AI 看不到你上传的照片，请用文字描述人物的外貌与穿着（中文即可），生成时照此还原&#10;例：齐肩黑发、圆脸；穿白色宽松T恤、浅蓝牛仔裤、白色运动鞋"></textarea>
+        <div class="upload-desc-wrap" id="uploadDescWrap" hidden>
+          <textarea class="upload-desc" id="uploadDesc" placeholder="点右下角「✨ AI 识别描述」自动复制照片，粘贴到 TRAE 对话框发给 AI，再把回复的描述粘贴到这里&#10;也可自己写，例：齐肩黑发、圆脸；白色宽松T恤、浅蓝牛仔裤、白色运动鞋"></textarea>
+          <button class="ai-desc-btn" id="aiDescBtn" type="button" title="一键复制照片：粘贴到 TRAE 对话框发给 AI，再把 AI 回复的描述粘贴回本框">✨ AI 识别描述</button>
+        </div>
 
         <div class="lp-hr" style="top:220px"></div>
         <div class="lp-label" style="top:238px">当前搭配/STYLING</div>
@@ -96,7 +99,7 @@
 </div>
 
 <script src="atelier-data.js?v=9"></script>
-<script src="studio.js?v=19"></script>
+<script src="studio.js?v=20"></script>
 <script>
     (function () {
         var DESIGN_W = 1920, DESIGN_H = 1002;

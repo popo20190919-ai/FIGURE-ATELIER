@@ -236,8 +236,8 @@ function updateChips() {
 }
 
 function updateInfo() {
-    const descTa = $('uploadDesc');
-    descTa.hidden = true;
+    const descWrap = $('uploadDescWrap');
+    descWrap.hidden = true;
     $('lookDesc').hidden = false;
     if (state.mode === 'gen' && state.gen) {
         $('lookNo').textContent = 'AI';
@@ -261,8 +261,8 @@ function updateInfo() {
         $('lookName').textContent = item.name;
         $('lookEn').textContent = 'MY IDENTITY';
         $('lookDesc').hidden = true;
-        descTa.hidden = false;
-        descTa.value = item.desc || '';
+        descWrap.hidden = false;
+        $('uploadDesc').value = item.desc || '';
         return;
     }
     if (look) {
@@ -632,6 +632,22 @@ function init() {
         if (item) {
             item.desc = e.target.value;
             persistUploads();
+        }
+    });
+
+    $('aiDescBtn').addEventListener('click', async () => {
+        const item = identityItem();
+        const btn = $('aiDescBtn');
+        if (!item || !item.img) return;
+        const oldText = btn.textContent;
+        const flash = (t) => { btn.textContent = t; setTimeout(() => { btn.textContent = oldText; }, 4000); };
+        try {
+            const blob = await (await fetch(item.img)).blob();
+            const type = blob.type || 'image/png';
+            await navigator.clipboard.write([new ClipboardItem({ [type]: blob })]);
+            flash('✓ 已复制照片，去 TRAE 对话框粘贴');
+        } catch (e) {
+            flash('复制失败，请直接把照片发到对话框');
         }
     });
 
