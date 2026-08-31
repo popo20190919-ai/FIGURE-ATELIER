@@ -219,9 +219,11 @@ a { text-decoration: none; color: inherit; }
 .chip-person .v,
 .chip-accessory .v { background: var(--acid-soft); color: var(--ink); }
 
-.chip-outfit .k,
+.chip-top .k,
+.chip-bottom .k,
 .chip-pose .k { background: var(--pink); color: #FFFFFF; }
-.chip-outfit .v,
+.chip-top .v,
+.chip-bottom .v,
 .chip-pose .v { background: var(--pink-soft); color: var(--ink); }
 
 .chip-shoes .k { background: var(--chip-grey); color: var(--ink); }
@@ -452,7 +454,7 @@ a { text-decoration: none; color: inherit; }
 .lib-tab {
     position: absolute;
     top: 24px;
-    width: 81px;
+    width: 64px;
     height: 48px;
     border: none;
     border-radius: 16px;

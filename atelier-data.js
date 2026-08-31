@@ -200,7 +200,8 @@ const CAST = [
         img: IMG(`${FRONTVIEW}, young East Asian female model with black hair tied in a high ponytail, wearing a dark grey sleeveless mandarin-collar waistcoat with light blue side panels and metal side buckles over a light blue ruffled-collar shirt, black asymmetric draped mini skirt, grey slouchy mid-calf socks, black pointed-toe mary-jane heels`, 'portrait_4_3'),
         identity: 'a young East Asian woman in her early twenties with black hair tied in a high ponytail, fair skin, oval face, slender tall figure',
         wear: {
-            outfit: 'dark grey sleeveless mandarin-collar waistcoat with light blue side panels and metal side buckles over a light blue ruffled-collar shirt, black asymmetric draped mini skirt, grey slouchy mid-calf socks',
+            top: 'dark grey sleeveless mandarin-collar waistcoat with light blue side panels and metal side buckles over a light blue ruffled-collar shirt',
+            bottom: 'black asymmetric draped mini skirt, grey slouchy mid-calf socks',
             shoes: 'black pointed-toe mary-jane heels',
             accessory: null
         }
@@ -213,7 +214,8 @@ const CAST = [
         img: IMG(`${FRONTVIEW}, young East Asian male model with black wavy medium-length hair under a black baseball cap, wearing black eyeglasses, oversized light blue long-sleeve shirt, black skinny tie, black high-waisted pleated knee-length shorts, two black leather belts with a black belt pouch, black mid socks, black monk-strap leather shoes`, 'portrait_4_3'),
         identity: 'a young East Asian man in his early twenties with black wavy medium-length hair, fair skin, wearing black eyeglasses, slim tall figure',
         wear: {
-            outfit: 'oversized light blue long-sleeve shirt, black skinny tie, black high-waisted pleated knee-length shorts, two black leather belts with a black belt pouch, black mid-calf socks',
+            top: 'oversized light blue long-sleeve shirt, black skinny tie, two black leather belts with a black belt pouch',
+            bottom: 'black high-waisted pleated knee-length shorts, black mid-calf socks',
             shoes: 'black monk-strap leather shoes',
             accessory: null
         }
@@ -226,7 +228,8 @@ const CAST = [
         img: IMG(`${FRONTVIEW}, young East Asian female model with a short black bob haircut and blunt bangs, wearing an olive green hourglass blazer with exaggerated structured wide shoulders over a light blue shirt and tie, burgundy shorts, long light blue gloves, light blue knee-high socks, black pointed-toe stiletto heels`, 'portrait_4_3'),
         identity: 'a young East Asian woman in her early twenties with a short black bob haircut and blunt bangs, fair skin, small face, slender figure',
         wear: {
-            outfit: 'olive green hourglass blazer with exaggerated structured wide shoulders over a light blue shirt and tie, burgundy shorts, long light blue gloves, light blue knee-high socks',
+            top: 'olive green hourglass blazer with exaggerated structured wide shoulders over a light blue shirt and tie, long light blue gloves',
+            bottom: 'burgundy shorts, light blue knee-high socks',
             shoes: 'black pointed-toe stiletto high heels',
             accessory: null
         }
@@ -239,7 +242,8 @@ const CAST = [
         img: 'images/people/people-04-front.jpg',
         identity: 'a young woman in her early twenties with long straight center-parted black hair, warm tan skin, sharp facial features, wearing narrow black sunglasses, slender tall figure',
         wear: {
-            outfit: 'navy and burgundy color-block V-neck cropped football jersey with grey shoulder panels, grey asymmetric pleated mini skirt with a black leather belt, white ribbed crew socks',
+            top: 'navy and burgundy color-block V-neck cropped football jersey with grey shoulder panels',
+            bottom: 'grey asymmetric pleated mini skirt with a black leather belt, white ribbed crew socks',
             shoes: 'black chunky leather loafers with thick platform soles',
             accessory: null
         }
@@ -252,9 +256,10 @@ const CAST = [
         img: 'images/people/people-05-front.jpg',
         identity: 'a young East Asian woman in her early twenties with long straight center-parted dark reddish-brown hair, fair skin, oval face, red lips, slender tall figure',
         wear: {
-            outfit: 'oversized grey tailored blazer worn open over a cream sheer lace camisole with long black lace ribbon ties hanging down the front, matching grey wide-leg tailored trousers, black choker necklace',
+            top: 'oversized grey tailored blazer worn open over a cream sheer lace camisole with long black lace ribbon ties hanging down the front',
+            bottom: 'matching grey wide-leg tailored trousers',
             shoes: 'black pointed-toe leather heels',
-            accessory: null
+            accessory: 'wearing a black choker necklace'
         }
     },
     {
@@ -265,7 +270,8 @@ const CAST = [
         img: 'images/library/lib_cast_1.png',
         identity: 'a young woman in her early twenties with long straight center-parted black hair, fair skin, oval face, gold hoop earrings, slender tall figure',
         wear: {
-            outfit: 'fitted black spaghetti-strap bodycon mini slip dress',
+            top: 'fitted black spaghetti-strap bodycon mini slip dress',
+            bottom: null,
             shoes: 'slouchy black leather knee-high pointed-toe boots',
             accessory: 'wearing gold hoop earrings'
         }
@@ -278,7 +284,8 @@ const CAST = [
         img: 'images/library/lib_cast_7.png',
         identity: 'a young woman in her early twenties with long straight platinum blonde hair, pale skin, sharp facial features, tall slender figure',
         wear: {
-            outfit: 'black ribbed turtleneck long-sleeve bodysuit with a diamond fishnet cutout at the chest and side waist cutouts, black baggy wide-leg cargo trousers with a black leather belt',
+            top: 'black ribbed turtleneck long-sleeve bodysuit with a diamond fishnet cutout at the chest and side waist cutouts',
+            bottom: 'black baggy wide-leg cargo trousers with a black leather belt',
             shoes: 'black chunky platform leather shoes',
             accessory: null
         }
@@ -291,7 +298,8 @@ const CAST = [
         img: 'images/library/lib_cast_8.png',
         identity: 'a young woman in her early twenties with shoulder-length platinum blonde hair, pale skin, delicate facial features, layered silver necklaces, slender figure',
         wear: {
-            outfit: 'olive green lace camisole crop top with crisscross lace-up front and hanging tie strings, matching olive green ruched draped midi skirt with side ruching',
+            top: 'olive green lace camisole crop top with crisscross lace-up front and hanging tie strings',
+            bottom: 'matching olive green ruched draped midi skirt with side ruching',
             shoes: 'olive green leather ankle boots',
             accessory: 'wearing layered silver chain necklaces'
         }
@@ -300,15 +308,15 @@ const CAST = [
 
 const findCast = (id) => CAST.find((c) => c.id === id) || null;
 
-const OUTFIT_PHRASES = {
-    O1: 'oversized black and white plaid flannel shirt with frayed raw hem layered over a long grey plaid shirt, matching plaid mini skirt with raw hem',
-    O2: 'black leather biker jacket covered with silver studs and spikes, black leather mini skirt with zipper details',
-    O3: 'sheer black mesh ruffled long sleeve top with lace tie details, loose ripped blue denim wide leg jeans, black fingerless gloves',
-    O4: 'olive dark green lace-up camisole top with thin straps and hanging drawstrings, draped olive green mini skirt',
-    O5: 'black fishnet knit long sleeve top with chest cutout and high neck, black baggy cargo trousers with leather belt',
-    O6: 'black glossy leather tank top, long black leather maxi skirt with elastic waist',
-    O7: 'oversized black technical nylon parka coat with hood and drawstrings, black wide leg trousers',
-    O8: 'black silk turtleneck long sleeve top, black wide leg trousers',
+const TOP_PHRASES = {
+    O1: 'oversized black and white plaid flannel shirt with frayed raw hem layered over a long grey plaid shirt',
+    O2: 'black leather biker jacket covered with silver studs and spikes',
+    O3: 'sheer black mesh ruffled long sleeve top with lace tie details, black fingerless gloves',
+    O4: 'olive dark green lace-up camisole top with thin straps and hanging drawstrings',
+    O5: 'black fishnet knit long sleeve top with chest cutout and high neck',
+    O6: 'black glossy leather tank top',
+    O7: 'oversized black technical nylon parka coat with hood and drawstrings',
+    O8: 'black silk turtleneck long sleeve top',
     O9: 'retro Brazil tie-dye football jersey in green yellow and blue with number 26 print',
     O10: 'cropped brown suede double-breasted jacket with shoulder epaulets',
     O11: 'sleeveless blue water-ripple print tank top with white trim',
@@ -317,7 +325,10 @@ const OUTFIT_PHRASES = {
     O14: 'oversized grey tailored blazer worn open over a lace-trim inner top',
     O15: 'sleeveless blue denim patchwork top with frayed seams and a navy silk neckerchief scarf tied at the neck',
     O16: 'navy and burgundy color-block V-neck cropped football jersey with grey shoulder panels',
-    O17: 'olive green lace camisole top with crisscross lace-up front, thin straps and drawstring ties',
+    O17: 'olive green lace camisole top with crisscross lace-up front, thin straps and drawstring ties'
+};
+
+const BOTTOM_PHRASES = {
     O18: 'loose green corduroy pull-on shorts with elastic waistband',
     O19: 'khaki grey cropped seven-point trousers with a red braided rope belt',
     O20: 'brown flared trousers with blue triangle inserts at the hems and a large blue western belt buckle',
@@ -326,6 +337,20 @@ const OUTFIT_PHRASES = {
     O23: 'grey asymmetric pleated mini kilt skirt with a black leather belt',
     O24: 'olive green ruched draped maxi skirt with side drawstring ruching'
 };
+
+const LOOK_BOTTOM_PHRASES = {
+    L01: 'matching black and white plaid mini skirt with frayed raw hem',
+    L02: 'loose ripped blue denim wide leg jeans',
+    L03: 'black leather mini skirt with zipper details',
+    L04: 'draped olive green mini skirt',
+    L05: 'black baggy cargo trousers with leather belt',
+    L06: 'long black leather maxi skirt with elastic waist',
+    L07: 'black wide leg trousers',
+    L08: 'black wide leg trousers'
+};
+
+const TOPS = OUTFITS.filter((o) => Number(o.id.slice(1)) <= 17);
+const BOTTOMS = OUTFITS.filter((o) => Number(o.id.slice(1)) >= 18);
 
 const SHOE_PHRASES = {
     S1: 'black chunky leather platform boots with thick soles',

@@ -33,7 +33,8 @@ const state = {
     mode: 'identity',
     identity: { kind: 'cast', id: 'C4' },
     sel: {
-        outfitId: 'O1',
+        topId: 'O1',
+        bottomId: null,
         shoesId: 'S1',
         accessoryId: 'A3',
         poseId: null
@@ -89,7 +90,7 @@ function identityPromptText() {
 }
 
 function defaultWear() {
-    const empty = { outfit: null, shoes: null, accessory: null };
+    const empty = { top: null, bottom: null, shoes: null, accessory: null };
     const cast = identityCast();
     if (cast && cast.wear) return cast.wear;
     const look = identityLook();
@@ -98,7 +99,8 @@ function defaultWear() {
         const s = SHOES.find((x) => x.name === look.shoes);
         const a = ACCESSORIES.find((x) => x.name === look.accessory);
         return {
-            outfit: o ? OUTFIT_PHRASES[o.id] : null,
+            top: o ? TOP_PHRASES[o.id] : null,
+            bottom: LOOK_BOTTOM_PHRASES[look.id] || null,
             shoes: s ? SHOE_PHRASES[s.id] : null,
             accessory: a ? ACCESSORY_PHRASES[a.id] : null
         };
@@ -118,7 +120,8 @@ function isItemActive(tab, id, kind) {
         if (state.mode === 'gen') return false;
         return state.identity.kind === kind && state.identity.id === id;
     }
-    if (tab === 'outfit') return id === 'none' ? !state.sel.outfitId : state.sel.outfitId === id;
+    if (tab === 'top') return id === 'none' ? !state.sel.topId : state.sel.topId === id;
+    if (tab === 'bottom') return id === 'none' ? !state.sel.bottomId : state.sel.bottomId === id;
     if (tab === 'shoes') return id === 'none' ? !state.sel.shoesId : state.sel.shoesId === id;
     if (tab === 'accessory') return id === 'none' ? !state.sel.accessoryId : state.sel.accessoryId === id;
     if (tab === 'pose') return !!state.sel.poseId && state.sel.poseId === id;
@@ -188,8 +191,9 @@ function renderLibrary() {
     }
 
     let items = [];
-    const noneTabs = ['outfit', 'shoes', 'accessory'];
-    if (state.tab === 'outfit') items = OUTFITS;
+    const noneTabs = ['top', 'bottom', 'shoes', 'accessory'];
+    if (state.tab === 'top') items = TOPS;
+    else if (state.tab === 'bottom') items = BOTTOMS;
     else if (state.tab === 'shoes') items = SHOES;
     else if (state.tab === 'accessory') items = ACCESSORIES;
     else if (state.tab === 'pose') items = POSES;
@@ -212,12 +216,14 @@ function updateChips() {
     else if (state.identity.kind === 'cast') idName = identityCast() ? identityCast().name : '素材人物';
     else if (state.identity.kind === 'upload') idName = identityItem() ? identityItem().name : '我的人物';
     else if (identityLook()) idName = identityLook().name;
-    const outfit = OUTFITS.find((o) => o.id === state.sel.outfitId);
+    const top = TOPS.find((o) => o.id === state.sel.topId);
+    const bottom = BOTTOMS.find((o) => o.id === state.sel.bottomId);
     const shoes = SHOES.find((s) => s.id === state.sel.shoesId);
     const accessory = ACCESSORIES.find((a) => a.id === state.sel.accessoryId);
     const chips = [
         { k: '人物', v: idName, cat: 'person' },
-        { k: '服装', v: outfit ? outfit.name : '无', cat: 'outfit' },
+        { k: '上装', v: top ? top.name : '无', cat: 'top' },
+        { k: '下装', v: bottom ? bottom.name : '无', cat: 'bottom' },
         { k: '鞋子', v: shoes ? shoes.name : '无', cat: 'shoes' },
         { k: '饰品', v: accessory ? accessory.name : '无', cat: 'accessory' },
         { k: '动作', v: selectedPoseName(), cat: 'pose' }
@@ -314,7 +320,8 @@ function renderHistory() {
 }
 
 function buildPrompt() {
-    const outfit = OUTFITS.find((o) => o.id === state.sel.outfitId);
+    const top = TOPS.find((o) => o.id === state.sel.topId);
+    const bottom = BOTTOMS.find((o) => o.id === state.sel.bottomId);
     const shoes = SHOES.find((s) => s.id === state.sel.shoesId);
     const accessory = ACCESSORIES.find((a) => a.id === state.sel.accessoryId);
 
@@ -329,12 +336,19 @@ function buildPrompt() {
     ];
 
     const dw = defaultWear();
-    if (outfit) {
-        parts.push(`wearing ${OUTFIT_PHRASES[outfit.id]}`);
-    } else if (dw.outfit) {
-        parts.push(`wearing ${dw.outfit}`);
+    if (top) {
+        parts.push(`wearing ${TOP_PHRASES[top.id]}`);
+    } else if (dw.top) {
+        parts.push(`wearing ${dw.top}`);
     } else {
-        parts.push('keep the exact same original outfit and clothing as worn in the identity reference, do not change or restyle the clothes');
+        parts.push('keep the exact same original top and outfit as worn in the identity reference, do not change or restyle the clothes');
+    }
+    if (bottom) {
+        parts.push(`paired with ${BOTTOM_PHRASES[bottom.id]}`);
+    } else if (dw.bottom) {
+        parts.push(`paired with ${dw.bottom}`);
+    } else {
+        parts.push('keep the same original bottoms as in the identity reference');
     }
     if (shoes) {
         parts.push(SHOE_PHRASES[shoes.id]);
@@ -496,7 +510,7 @@ function resetStudio() {
     state.mode = 'identity';
     state.gen = null;
     state.history = [];
-    state.sel = { outfitId: 'O1', shoesId: 'S1', accessoryId: 'A3', poseId: null };
+    state.sel = { topId: 'O1', bottomId: null, shoesId: 'S1', accessoryId: 'A3', poseId: null };
     $('promptInput').value = '';
     updateStage();
 }
@@ -542,7 +556,8 @@ function handleItemClick(tab, id, kind) {
     }
     state.gen = null;
     if (state.mode === 'gen') state.mode = 'identity';
-    if (tab === 'outfit') state.sel.outfitId = id === 'none' ? null : id;
+    if (tab === 'top') state.sel.topId = id === 'none' ? null : id;
+    else if (tab === 'bottom') state.sel.bottomId = id === 'none' ? null : id;
     else if (tab === 'shoes') state.sel.shoesId = id === 'none' ? null : id;
     else if (tab === 'accessory') state.sel.accessoryId = id === 'none' ? null : id;
     else if (tab === 'pose') state.sel.poseId = id;
@@ -561,10 +576,10 @@ function init() {
     } else if (lookId && LOOKS.some((l) => l.id === lookId)) {
         state.identity = { kind: 'look', id: lookId };
         const outfitByLook = OUTFITS.find((o) => o.look === lookId);
-        if (outfitByLook) state.sel.outfitId = outfitByLook.id;
+        if (outfitByLook) state.sel.topId = outfitByLook.id;
     }
     const libTab = params.get('lib');
-    if (['person', 'outfit', 'shoes', 'accessory', 'pose'].includes(libTab)) state.tab = libTab;
+    if (['person', 'top', 'bottom', 'shoes', 'accessory', 'pose'].includes(libTab)) state.tab = libTab;
 
     $('libTabs').addEventListener('click', (e) => {
         const tab = e.target.closest('.lib-tab');
