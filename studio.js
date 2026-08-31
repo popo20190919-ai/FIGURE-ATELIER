@@ -100,11 +100,23 @@ function isItemActive(tab, id, kind) {
         if (state.mode === 'gen') return false;
         return state.identity.kind === kind && state.identity.id === id;
     }
-    if (tab === 'outfit') return state.sel.outfitId === id;
-    if (tab === 'shoes') return state.sel.shoesId === id;
-    if (tab === 'accessory') return state.sel.accessoryId === id;
+    if (tab === 'outfit') return id === 'none' ? !state.sel.outfitId : state.sel.outfitId === id;
+    if (tab === 'shoes') return id === 'none' ? !state.sel.shoesId : state.sel.shoesId === id;
+    if (tab === 'accessory') return id === 'none' ? !state.sel.accessoryId : state.sel.accessoryId === id;
     if (tab === 'pose') return !!state.sel.poseId && state.sel.poseId === id;
     return false;
+}
+
+function noneItemHTML(tab) {
+    const active = isItemActive(tab, 'none', 'none');
+    return `
+        <button type="button" class="lib-item lib-none ${active ? 'active' : ''}" data-tab="${tab}" data-kind="none" data-id="none">
+            <span class="item-check"><svg width="13" height="9" viewBox="0 0 13 9"><path d="M1.5 4.5 L5 8 L11.5 1" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div class="lib-none-inner"><span class="lib-none-word">无</span></div>
+            <span class="lib-item-foot"></span>
+            <div class="lib-item-name">保持原样</div>
+        </button>
+    `;
 }
 
 function libItemHTML(item, tab, opts = {}) {
@@ -158,12 +170,14 @@ function renderLibrary() {
     }
 
     let items = [];
+    const noneTabs = ['outfit', 'shoes', 'accessory'];
     if (state.tab === 'outfit') items = OUTFITS;
     else if (state.tab === 'shoes') items = SHOES;
     else if (state.tab === 'accessory') items = ACCESSORIES;
     else if (state.tab === 'pose') items = POSES;
 
-    grid.innerHTML = items.map((item) => libItemHTML(item, state.tab)).join('');
+    const noneCard = noneTabs.includes(state.tab) ? noneItemHTML(state.tab) : '';
+    grid.innerHTML = noneCard + items.map((item) => libItemHTML(item, state.tab)).join('');
 }
 
 function selectedPoseName() {
@@ -185,9 +199,9 @@ function updateChips() {
     const accessory = ACCESSORIES.find((a) => a.id === state.sel.accessoryId);
     const chips = [
         { k: '人物', v: idName, cat: 'person' },
-        { k: '服装', v: outfit ? outfit.name : '', cat: 'outfit' },
-        { k: '鞋子', v: shoes ? shoes.name : '', cat: 'shoes' },
-        { k: '饰品', v: accessory ? accessory.name : '', cat: 'accessory' },
+        { k: '服装', v: outfit ? outfit.name : '无', cat: 'outfit' },
+        { k: '鞋子', v: shoes ? shoes.name : '无', cat: 'shoes' },
+        { k: '饰品', v: accessory ? accessory.name : '无', cat: 'accessory' },
         { k: '动作', v: selectedPoseName(), cat: 'pose' }
     ];
     $('chipRow').innerHTML = chips
@@ -293,11 +307,20 @@ function buildPrompt() {
 
     const parts = [
         `fashion editorial full body photograph of ${identityPromptText()}`,
-        posePhrase,
-        `wearing ${OUTFIT_PHRASES[outfit.id]}`,
-        SHOE_PHRASES[shoes.id],
-        ACCESSORY_PHRASES[accessory.id]
+        posePhrase
     ];
+
+    if (outfit) {
+        parts.push(`wearing ${OUTFIT_PHRASES[outfit.id]}`);
+    } else {
+        parts.push('keep the exact same original outfit and clothing as worn in the identity reference, do not change or restyle the clothes');
+    }
+    if (shoes) {
+        parts.push(SHOE_PHRASES[shoes.id]);
+    } else {
+        parts.push('keep the same original footwear as in the identity reference');
+    }
+    if (accessory) parts.push(ACCESSORY_PHRASES[accessory.id]);
 
     const userText = $('promptInput').value.trim();
     if (userText) parts.push(userText);
@@ -495,9 +518,9 @@ function handleItemClick(tab, id, kind) {
     }
     state.gen = null;
     if (state.mode === 'gen') state.mode = 'identity';
-    if (tab === 'outfit') state.sel.outfitId = id;
-    else if (tab === 'shoes') state.sel.shoesId = id;
-    else if (tab === 'accessory') state.sel.accessoryId = id;
+    if (tab === 'outfit') state.sel.outfitId = id === 'none' ? null : id;
+    else if (tab === 'shoes') state.sel.shoesId = id === 'none' ? null : id;
+    else if (tab === 'accessory') state.sel.accessoryId = id === 'none' ? null : id;
     else if (tab === 'pose') state.sel.poseId = id;
     updateStage();
 }

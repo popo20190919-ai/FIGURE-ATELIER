@@ -597,6 +597,28 @@ a { text-decoration: none; color: inherit; }
 }
 .lib-item.active .item-check svg { display: block; }
 
+/* “无 / 保持原样”卡片 */
+.lib-item.lib-none { background: #EAEAEA; }
+.lib-none-inner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: calc(100% - 32.5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+.lib-none-word {
+    font-size: 46px;
+    font-weight: 500;
+    line-height: 1;
+    color: #9F9F9F;
+}
+.lib-item.lib-none.active { background: var(--pink); }
+.lib-item.lib-none.active .lib-none-word { color: #FFFFFF; }
+
 /* 非人物 tab 的单品卡：图片区域更大 */
 .lib-item.pose .lib-item-img,
 .lib-item:not(.person) .lib-item-img {
