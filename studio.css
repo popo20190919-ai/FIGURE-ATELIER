@@ -337,44 +337,13 @@ a { text-decoration: none; color: inherit; }
     display: block;
 }
 
-/* AI 生成结果：3:4 大图居中于生成卡（卡 878×740）
-   抠底方案：提示词强制纯白背景 + mix-blend-mode: multiply，
-   白 × 白 = 白（背景消融进卡片），人物像素 × 白 = 人物原色（零损），无需读取跨域像素。 */
+/* AI 生成结果：3:4 大图居中于生成卡（卡 878×740） */
 .stage-img-wrap.is-gen {
     left: 50%;
     top: 50%;
     width: 525px;
     height: 700px;
     transform: translate(-50%, -50%);
-    background: #ffffff;
-}
-.stage-img-wrap.is-gen .stage-img {
-    mix-blend-mode: multiply;
-}
-
-/* 下载抠底 PNG */
-.cut-dl-btn {
-    position: absolute;
-    right: 26px;
-    bottom: 24px;
-    z-index: 8;
-    display: none;
-    background: #000000;
-    color: var(--acid, #DBFE01);
-    border: 1px solid #000000;
-    padding: 11px 20px;
-    font-family: 'Inter', 'Noto Sans SC', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-decoration: none;
-    border-radius: 0;
-    cursor: pointer;
-}
-.cut-dl-btn:not([hidden]) { display: inline-block; }
-.cut-dl-btn:hover {
-    background: var(--acid, #DBFE01);
-    color: #000000;
 }
 
 /* 生成中遮罩 */
@@ -454,12 +423,11 @@ a { text-decoration: none; color: inherit; }
     border: 1px solid #9F9F9F;
     border-radius: 10px;
     overflow: hidden;
-    background: #FFFFFF;
+    background: #EAEAEA;
     padding: 0;
     flex: none;
 }
 .history-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.history-thumb img.gen-blend { mix-blend-mode: multiply; }
 .history-thumb.active { border: 2px solid var(--pink); }
 .thumb-tag { display: none; }
 
