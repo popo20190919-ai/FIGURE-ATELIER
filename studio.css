@@ -337,21 +337,19 @@ a { text-decoration: none; color: inherit; }
     display: block;
 }
 
-/* AI 生成结果：3:4 大图居中于生成卡（卡 878×740） */
+/* AI 生成结果：3:4 大图居中于生成卡（卡 878×740）
+   抠底方案：提示词强制纯白背景 + mix-blend-mode: multiply，
+   白 × 白 = 白（背景消融进卡片），人物像素 × 白 = 人物原色（零损），无需读取跨域像素。 */
 .stage-img-wrap.is-gen {
     left: 50%;
     top: 50%;
     width: 525px;
     height: 700px;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    background-image:
-        linear-gradient(45deg, #ededed 25%, transparent 25%),
-        linear-gradient(-45deg, #ededed 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #ededed 75%),
-        linear-gradient(-45deg, transparent 75%, #ededed 75%);
-    background-size: 22px 22px;
-    background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+    background: #ffffff;
+}
+.stage-img-wrap.is-gen .stage-img {
+    mix-blend-mode: multiply;
 }
 
 /* 下载抠底 PNG */
@@ -456,11 +454,12 @@ a { text-decoration: none; color: inherit; }
     border: 1px solid #9F9F9F;
     border-radius: 10px;
     overflow: hidden;
-    background: #EAEAEA;
+    background: #FFFFFF;
     padding: 0;
     flex: none;
 }
 .history-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.history-thumb img.gen-blend { mix-blend-mode: multiply; }
 .history-thumb.active { border: 2px solid var(--pink); }
 .thumb-tag { display: none; }
 

@@ -291,11 +291,11 @@ function updateStage() {
 
     const dlBtn = $('cutDlBtn');
     if (dlBtn) {
-        const canDl = state.mode === 'gen' && state.gen && state.gen.cut;
+        const canDl = state.mode === 'gen' && !!state.gen;
         dlBtn.hidden = !canDl;
         if (canDl) {
             dlBtn.href = state.gen.img;
-            dlBtn.download = `figure-cutout-${state.gen.id}.png`;
+            dlBtn.download = `figure-${state.gen.id}.jpg`;
         }
     }
 
@@ -330,8 +330,8 @@ function renderHistory() {
     bar.innerHTML = state.history
         .map((h, i) => `
             <button type="button" class="history-thumb ${i === state.history.length - 1 ? 'active' : ''}" data-idx="${i}" title="${h.tag}">
-                <img src="${h.img}" alt="${h.tag}" loading="lazy">
-                <span class="thumb-tag">${h.cut ? '已抠底' : 'AI 生成'}</span>
+                <img src="${h.img}" alt="${h.tag}" loading="lazy" class="gen-blend">
+                <span class="thumb-tag">AI 生成</span>
             </button>
         `)
         .join('');
@@ -388,7 +388,7 @@ function buildPrompt() {
         ? 'this must be the exact same man, keep his facial features, face shape, hairstyle, hair color and skin tone perfectly identical to the identity described above, do not change his identity'
         : IDENTITY_LOCK;
     parts.push(lockText);
-    parts.push('full body head to toe, plain seamless solid studio background in very light warm gray color hex #FAFAFA, brutalist streetwear aesthetic, high contrast, photorealistic');
+    parts.push('full body head to toe, plain seamless pure white studio background hex #FFFFFF, clean white cyclorama, even soft lighting, brutalist streetwear aesthetic, high contrast, photorealistic');
     return parts.join(', ');
 }
 
@@ -603,20 +603,29 @@ function failGenerate(token, reason) {
     }
 }
 
+/* 生图 URL：始终直连生图服务（TRAE 内置浏览器由原生网络栈注入鉴权并显示真图）。
+   跨域像素不可读，抠底改用 CSS mix-blend-mode 视觉融合（见 .is-gen 样式），不依赖 canvas。 */
+function genUrl(prompt, size) {
+    return `${IMG(prompt, size)}&_t=${Date.now()}`;
+}
+
 function loadGeneratedImage(url, prompt, token, attempt, fastFails) {
     const img = new Image();
     const t0 = Date.now();
+    const direct = url.charAt(0) === '/';
     img.onload = () => {
         if (token !== state.genToken) return;
-        const isPlaceholder = img.naturalWidth >= 1800 || img.naturalHeight >= 1800;
-        if (isPlaceholder && attempt < 10) {
-            $('genCn').textContent = `排队中，正在重试 ${attempt + 1}/10…`;
-            setTimeout(() => loadGeneratedImage(`${url.split('&_r=')[0]}&_r=${attempt + 1}`, prompt, token, attempt + 1, 0), 3500);
-            return;
-        }
-        if (isPlaceholder) {
-            failGenerate(token, 'busy');
-            return;
+        if (!direct) {
+            const isPlaceholder = img.naturalWidth >= 1800 || img.naturalHeight >= 1800;
+            if (isPlaceholder && attempt < 10) {
+                $('genCn').textContent = `排队中，正在重试 ${attempt + 1}/10…`;
+                setTimeout(() => loadGeneratedImage(`${url.split('&_r=')[0]}&_r=${attempt + 1}`, prompt, token, attempt + 1, 0), 3500);
+                return;
+            }
+            if (isPlaceholder) {
+                failGenerate(token, 'busy');
+                return;
+            }
         }
         state.serviceOk = true;
         setSvcWarn(false);
@@ -644,7 +653,8 @@ function probeService() {
     const img = new Image();
     img.onload = () => setGenAvailable(true);
     img.onerror = () => setGenAvailable(false);
-    img.src = `${IMG('a plain light gray solid color test image', 'square')}&_probe=${Date.now()}`;
+    const url = genUrl('a plain light gray solid color test image', 'square');
+    img.src = `${url.split('&_t=')[0]}&_probe=${Date.now()}`;
 }
 
 function generate() {
@@ -663,7 +673,7 @@ function generate() {
     $('overlay').classList.add('visible');
 
     const prompt = buildPrompt();
-    const url = `${IMG(prompt, 'portrait_4_3')}&_t=${Date.now()}`;
+    const url = genUrl(prompt, 'portrait_4_3');
     loadGeneratedImage(url, prompt, token, 0, 0);
 }
 
