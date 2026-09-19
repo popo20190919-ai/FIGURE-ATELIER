@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-store,no-cache,must-revalidate">
+<title>gongxun · PORTFOLIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden;background:#fff}
+body{font-family:"PingFang SC","PingFang TC",-apple-system,sans-serif;color:#F8FF3A}
+.hero{position:relative;height:100vh;overflow:hidden}
+.bg-full{position:absolute;inset:0;z-index:0;background:url('images/figma-home/portfolio-bg.jpg') center/cover no-repeat;transition:filter .6s ease,transform .6s ease}
+body.detail-on .bg-full{filter:blur(18px) saturate(1.15);transform:scale(1.12)}
+#stage3d{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#stage3d:active{cursor:grabbing}
+.board{position:absolute;left:50%;top:0;width:1920px;height:1002px;transform:translateX(-50%);transform-origin:top center;z-index:2;pointer-events:none}
+.nav{position:absolute;left:29px;top:15px;display:flex;gap:20px;pointer-events:auto}
+.nav a{font-size:20.7px;letter-spacing:-0.09em;line-height:29px;color:#F8FF3A;text-decoration:none;cursor:pointer;font-weight:400}
+.nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.hint{position:absolute;left:50%;top:14px;transform:translateX(-50%);font-size:21.2px;letter-spacing:-0.09em;line-height:30px;white-space:nowrap;color:#F8FF3A}
+.logo{position:absolute;right:32px;top:0;font-family:'Nanum Pen Script',cursive;font-size:66px;line-height:76px;letter-spacing:-0.09em;color:#F8FF3A}
+.scroll-arrow{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:5;width:56px;height:56px;border-radius:50%;border:2.5px solid #F8FF3A;color:#F8FF3A;background:rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;pointer-events:auto;transition:opacity .45s ease;animation:arrowBob 1.7s ease-in-out infinite}
+.scroll-arrow svg{width:28px;height:28px}
+.scroll-arrow:hover{background:rgba(248,255,58,.2)}
+@keyframes arrowBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(9px)}}
+.detail-panel{position:fixed;z-index:3;top:22%;pointer-events:none;opacity:0;transition:opacity .5s ease .18s,transform .5s ease .18s}
+.detail-panel.side-r{right:3.5%;width:39%;text-align:left;transform:translateX(40px)}
+.detail-panel.side-l{left:3.5%;width:39%;text-align:left;transform:translateX(-40px)}
+body.detail-on .detail-panel{opacity:1;transform:none}
+.dt{font-size:min(32px,1.67vw);font-weight:600;color:#fff;letter-spacing:-0.06em;line-height:1.4;text-shadow:0 2px 18px rgba(0,40,80,.45)}
+.dm{margin-top:.8em;font-size:min(19px,.99vw);line-height:1.5;color:rgba(255,255,255,.9);letter-spacing:-0.04em;text-shadow:0 2px 14px rgba(0,40,80,.4)}
+.db{font-size:min(19px,.99vw);line-height:1.65;color:rgba(255,255,255,.96);letter-spacing:-0.03em;margin-top:.5em;text-shadow:0 2px 14px rgba(0,40,80,.45)}
+.lower{position:relative;width:100%;overflow:hidden;background:#fff}
+.lower-inner{position:absolute;left:50%;top:0;width:1920px;height:5558px;transform:translateX(-50%);transform-origin:top center}
+.lower-inner img{position:absolute;display:block;user-select:none;-webkit-user-drag:none}
+.sec1{top:0;left:-3px;width:1920px;height:2394px}
+.sec2{top:1821px;left:-14px;width:1941px;height:1552px}
+.grass{top:3950px;left:-61px;width:2107px;height:999px}
+.wcard{position:absolute;top:4433px;width:313px;height:427px;background:#f5f5f5;border-radius:27.5px}
+.wc1{left:79px}.wc2{left:439px}.wc3{left:799px}.wc4{left:1159px}.wc5{left:1519px}
+.wcard .f1{left:41px;top:39px;width:229px;height:229px}
+.wcard .f2a{left:41px;top:39px;width:229px;height:229px}
+.wcard .f2b{left:48px;top:46px;width:215px;height:215px}
+.wcard .f3b{left:44px;top:43px;width:225px;height:225px}
+.wcard .f3a{left:44px;top:32px;width:229px;height:229px}
+.wcard .f4{left:37px;top:39px;width:238px;height:228px}
+.wcard .f5a{left:44px;top:43px;width:225px;height:225px}
+.wcard .f5b{left:55px;top:55px;width:202px;height:202px}
+.wc-title{position:absolute;left:34px;top:307px;font-weight:600;font-size:31.8px;line-height:33px;letter-spacing:-7.3px;color:#737373;white-space:nowrap}
+.wc-desc{position:absolute;left:34px;top:351px;width:244px;font-weight:300;font-size:19.8px;line-height:20.5px;letter-spacing:-4.5px;color:#606060}
+.foot{position:absolute;left:-31px;top:5144px;width:1982px;height:693px;overflow:hidden}
+.foot>img{left:0;top:0;width:1982px;height:693px}
+.foot-gx{position:absolute;left:90px;top:100px;font-family:'Nanum Pen Script',cursive;font-weight:400;font-size:94.5px;line-height:109px;letter-spacing:-8.5px;color:#F8FF3A}
+.foot-contact{position:absolute;left:1520px;top:105px;width:330px;font-weight:400;font-size:24.3px;line-height:36.8px;letter-spacing:-2.2px;color:#F8FF3A;white-space:pre-line;text-align:left}
+.foot-email{position:absolute;left:90px;top:170px;font-weight:400;font-size:144.8px;line-height:218.7px;letter-spacing:-13px;color:#F8FF3A;white-space:nowrap;text-transform:uppercase}
+.profile-composition{position:absolute;left:0;top:1200px;width:1920px;height:700px;overflow:hidden;background:#fff;z-index:4;color:#969696}
+.profile-copy-img{position:absolute;left:117px;top:84px;width:714px;height:533px;z-index:2}
+.collage-blank{position:absolute;left:-80px;top:302px;width:2080px;height:784px;background:#fff;z-index:2}
+.piece-wrap{position:absolute;left:0;top:0;z-index:3;will-change:transform;pointer-events:auto;-webkit-user-drag:none}
+.piece{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.pc-gray{filter:grayscale(1)}
+.pc-color{opacity:0;transition:opacity .35s ease}
+.piece-wrap:hover .pc-color{opacity:1}
+#sceneLayer{position:absolute;left:0;top:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.scene-img{position:absolute;display:block;-webkit-user-drag:none;user-select:none;pointer-events:none;transform-origin:50% 50%}
+.scene-fan{will-change:transform}
+.scene-hit{position:absolute;left:990px;top:20px;width:900px;height:650px;z-index:8;pointer-events:auto}
+.vibe-link{position:absolute;z-index:9;display:block}
+.garden-blank{position:absolute;left:-80px;top:1997px;width:2080px;height:1009px;background:#fff;z-index:1}
+.garden-base{position:absolute;left:282.9px;top:2540.9px;width:1303px;height:331.5px;z-index:2;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.garden-title{position:absolute;left:501px;top:2105px;width:917px;z-index:4;font-weight:600;font-size:80.5px;line-height:83.4px;letter-spacing:-7.25px;color:#4c4c4c;text-align:center;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .6s ease}
+.garden-title.shown{opacity:1}
+.garden-label{position:absolute;z-index:4;color:#6a6a6a;font-size:19.35px;line-height:31px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .55s ease}
+.garden-label.shown{opacity:1}
+.garden-label .zh{font-weight:600}
+.garden-label .en{font-weight:400;margin-top:-10.4px}
+#gardenSvg{position:absolute;left:0;top:0;width:1920px;height:5558px;z-index:4;pointer-events:none;overflow:visible}
+#gardenSvg path,#gardenSvg circle{opacity:0;transition:opacity .55s ease}
+#gardenSvg path.shown,#gardenSvg circle.shown{opacity:1}
+.vibe-blank{position:absolute;left:-80px;top:3006px;width:2080px;height:944px;background:#fff;z-index:1}
+.vibe-shot{z-index:2;border-radius:41px;object-fit:cover}
+.vibe-title{position:absolute;left:501px;top:3167px;width:917px;z-index:4;font-weight:600;font-size:80.5px;line-height:83.4px;letter-spacing:-7.25px;color:#4c4c4c;text-align:center;text-transform:uppercase;white-space:nowrap}
+.vibe-pill{position:absolute;z-index:4;height:64px;border-radius:32px;background:#9f9f9f;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:27.1px;line-height:28.1px;letter-spacing:-2.44px;color:#fff}
+.vibe-btn{position:absolute;z-index:4;width:133px;height:64px;border-radius:32px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:27.1px;line-height:28.1px;letter-spacing:-2.44px}
+.vibe-btn.cyan{background:#00fffa;color:#111}
+.vibe-btn.orange{background:#ff7a33;color:#fff}
+.what-en{position:absolute;left:34px;top:4191px;width:295px;z-index:4;font-weight:600;font-size:44.65px;line-height:46.26px;letter-spacing:-6.25px;color:#c5c5c5;text-align:center}
+.what-emoji{position:absolute;left:1216px;top:4213px;width:80px;height:59px;z-index:4;font-size:79.7px;line-height:82.6px;overflow:visible}
+.what-cn{position:absolute;left:1308px;top:4198px;width:565px;z-index:4;font-weight:600;font-size:79.7px;line-height:82.6px;letter-spacing:-11.96px;color:#838383}
+#flowerMask{position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;pointer-events:none}
+#flowerMask img{position:absolute;display:block}
+#flowerLayer{position:absolute;left:0;top:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.flower{position:absolute;transform-origin:50% 100%;pointer-events:auto;cursor:pointer;will-change:transform}
+.flower img{position:absolute;display:block;pointer-events:none;-webkit-user-drag:none;user-select:none}
+.flower.nopdf{cursor:default}
+.pdf-backdrop{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(28,28,32,.42);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+.pdf-backdrop.open{opacity:1;pointer-events:auto}
+.pdf-win{position:relative;width:min(88vw,1040px);height:84vh;max-height:880px;background:#4b4f54;border-radius:24px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.38);display:flex;flex-direction:column;transform:scale(.95) translateY(12px);transition:transform .32s cubic-bezier(.22,1,.36,1)}
+.pdf-backdrop.open .pdf-win{transform:scale(1) translateY(0)}
+.pdf-bar{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;gap:14px;padding:0 22px;height:62px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.06);transition:opacity .28s ease,transform .28s ease}
+.pdf-win.idle .pdf-bar{opacity:0;transform:translateY(-12px);pointer-events:none}
+.pdf-title{font-weight:600;font-size:17px;color:#333;letter-spacing:-.2px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pdf-ext{flex:none;font-size:13px;font-weight:600;color:#777;border:1px solid #dcdcdc;border-radius:20px;padding:5px 12px;text-decoration:none;transition:border-color .2s,color .2s,background .2s}
+.pdf-ext:hover{border-color:#bbb;color:#444;background:rgba(255,255,255,.7)}
+.pdf-close{flex:none;width:38px;height:38px;border-radius:50%;border:none;background:#f0f0f0;color:#666;font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.pdf-close:hover{background:#e2e2e2;color:#111}
+.pdf-scroll{flex:1;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;scrollbar-width:none;-ms-overflow-style:none}
+.pdf-scroll::-webkit-scrollbar{width:0;height:0;display:none}
+.pdf-page{flex:none;width:100%;background:#fff;overflow:hidden}
+.pdf-page canvas{display:block;width:100%;height:auto}
+.pdf-loading{margin:auto;color:rgba(255,255,255,.85);font-size:15px;letter-spacing:.5px}
+.pdf-fallback{flex:1;width:100%;border:0;background:#fff}
+html.pdf-lock,body.pdf-lock{overflow:hidden}
+</style>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/three-addons/"}}</script>
+</head>
+<body>
+<section class="hero">
+<div class="bg-full"></div>
+<div class="board">
+  <nav class="nav">
+    <a href="#">关于</a>
+    <a href="#">项目</a>
+    <a href="#">能力</a>
+  </nav>
+  <div class="hint">拖动水平旋转，点击牌路聚焦，点击空白返回</div>
+  <div class="logo">gongxun</div>
+</div>
+<!-- #region debug-point A:canvas-access -->
+<canvas id="stage3d" role="button" aria-label="3D 藤蔓调试画布"></canvas>
+<!-- #endregion -->
+<div class="scroll-arrow" id="scrollArrow" role="button" aria-label="向下滚动"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
+</section>
+<div class="detail-panel" id="detailPanel">
+  <div class="dt" id="dTitle"></div>
+  <div class="dm" id="dMeta"></div>
+  <div id="dBody"></div>
+</div>
+<div class="pdf-backdrop" id="pdfBackdrop">
+  <div class="pdf-win" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
+    <div class="pdf-bar">
+      <div class="pdf-title" id="pdfTitle"></div>
+      <a class="pdf-ext" id="pdfExt" href="#" target="_blank" rel="noopener">新窗口打开</a>
+      <button class="pdf-close" id="pdfClose" aria-label="关闭">✕</button>
+    </div>
+    <div class="pdf-scroll" id="pdfScroll"></div>
+  </div>
+</div>
+<main class="lower" id="lower">
+<div class="lower-inner" id="lowerInner">
+  <img class="sec1" data-src="images/figma-home/lower-sec1.png" alt="" loading="lazy" decoding="async">
+  <img class="sec2" data-src="images/figma-home/lower-sec2.png" alt="" loading="lazy" decoding="async">
+  <section class="profile-composition" id="profile" aria-label="个人简介">
+    <img class="profile-copy-img" data-src="images/figma-home/profile-copy.png?v=20260920" alt="龚珣个人简介" loading="lazy" decoding="async">
+    <div id="sceneLayer"></div>
+    <div class="scene-hit" id="sceneHit" tabindex="0" aria-label="右侧动态场景"></div>
+  </section>
+  <img class="grass" data-src="images/figma-home/lower-grass.png" alt="" loading="lazy" decoding="async">
+  <div class="collage-blank"></div>
+  <div id="pieceLayer"></div>
+  <div id="flowerMask"></div>
+  <div id="flowerLayer"></div>
+  <div class="garden-blank"></div>
+  <img class="garden-base" data-src="images/figma-home/garden-base.png?v=20260901b" alt="" loading="lazy" decoding="async">
+  <div class="garden-title">🔑Key Projects</div>
+  <svg id="gardenSvg" viewBox="0 0 1920 5558" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#b5b5b5" stroke-width="2" fill="none">
+      <path d="M356 2411 V2458"/>
+      <path d="M645 2336 V2598"/>
+      <path d="M914 2285 V2352"/>
+      <path d="M1074 2336 V2410"/>
+      <path d="M1317 2321 V2438"/>
+      <path d="M1609 2449 V2523 H1562"/>
+    </g>
+    <g>
+      <circle cx="356" cy="2413" r="5" fill="#ffe100"/>
+      <circle cx="645" cy="2336" r="5" fill="#179b17"/>
+      <circle cx="914" cy="2285" r="5" fill="#ff9009"/>
+      <circle cx="1074" cy="2336" r="5" fill="#4eacff"/>
+      <circle cx="1317" cy="2320" r="5" fill="#e7ff30"/>
+      <circle cx="1609" cy="2449" r="5" fill="#ffea4e"/>
+    </g>
+  </svg>
+  <div class="garden-label" style="left:267px;top:2352px;width:295px"><div class="zh">大众点评实习设计作品</div><div class="en">Dazhong Dianping Design Works</div></div>
+  <div class="garden-label" style="left:549px;top:2275px;width:203px"><div class="zh">美团实习设计作品</div><div class="en">Meituan Design Works</div></div>
+  <div class="garden-label" style="left:835px;top:2223px;width:150px"><div class="zh">IU设计作品</div><div class="en">IU Design Works</div></div>
+  <div class="garden-label" style="left:1016px;top:2267px;width:238px"><div class="zh">剪映商业化设计作品</div><div class="en">Commercial Design Works</div></div>
+  <div class="garden-label" style="left:1232px;top:2236px;width:203px"><div class="zh">其他设计作品</div><div class="en">Internship design work</div></div>
+  <div class="garden-label" style="left:1534px;top:2386px;width:148px"><div class="zh">IP设计作品</div><div class="en">IP Design Works</div></div>
+  <div class="vibe-blank"></div>
+  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.png" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成网站工作台" loading="lazy" decoding="async">
+  <img class="vibe-shot" data-src="images/figma-home/vibe-poster.png" style="left:988px;top:3332px;width:743px;height:383px" alt="海报模板工坊" loading="lazy" decoding="async">
+  <div class="vibe-title">Vibecoding project</div>
+  <div class="vibe-pill" style="left:351px;top:3744px;width:311px">人物造型生成网站</div>
+  <div class="vibe-pill" style="left:1140px;top:3744px;width:311px">人物造型生成网站</div>
+  <div class="vibe-btn cyan" style="left:658px;top:3744px">点击进入</div>
+  <div class="vibe-btn orange" style="left:1447px;top:3744px">点击进入</div>
+  <a class="vibe-link" href="atelier.html" style="left:658px;top:3744px;width:133px;height:64px" aria-label="进入人物造型生成网站"></a>
+  <a class="vibe-link" href="poster.html" style="left:1447px;top:3744px;width:133px;height:64px" aria-label="进入海报生成工坊"></a>
+  <div class="what-en">WHAT I DO</div>
+  <div class="what-emoji">😆</div>
+  <div class="what-cn">把想法做得<br>更清晰,也更有趣。</div>
+  <div class="wcard wc1">
+    <img class="f1" data-src="images/figma-home/flower1.png" alt="" loading="lazy" decoding="async">
+    <div class="wc-title">品牌策略与视觉</div>
+    <div class="wc-desc">从策略、概念到完整视觉系统,让品牌拥有清晰而长期的表达。</div>
+  </div>
+  <div class="wcard wc2">
+    <img class="f2a" data-src="images/figma-home/flower2-bg.png" alt="" loading="lazy" decoding="async">
+    <img class="f2b" data-src="images/figma-home/flower2-fg.png" alt="" loading="lazy" decoding="async">
+    <div class="wc-title">AI创意与制作</div>
+    <div class="wc-desc">将生成式AI融入创意流程,快速探索并产出高完成度视觉。</div>
+  </div>
+  <div class="wcard wc3">
+    <img class="f3b" data-src="images/figma-home/flower3-bg.png" alt="" loading="lazy" decoding="async">
+    <img class="f3a" data-src="images/figma-home/flower3-fg.png" alt="" loading="lazy" decoding="async">
+    <div class="wc-title">跨媒介设计</div>
+    <div class="wc-desc">覆盖品牌、数字产品、动态与空间,保持一致的体验与审美。</div>
+  </div>
+  <div class="wcard wc4">
+    <img class="f4" data-src="images/figma-home/flower5.png" alt="" loading="lazy" decoding="async">
+    <div class="wc-title">敏捷共创</div>
+    <div class="wc-desc">善于把模糊需求转化为可落地方案,在协作中持续推动项目。</div>
+  </div>
+  <div class="wcard wc5">
+    <img class="f5a" data-src="images/figma-home/flower4-bg.png" alt="" loading="lazy" decoding="async">
+    <img class="f5b" data-src="images/figma-home/flower4-fg.png" alt="" loading="lazy" decoding="async">
+    <div class="wc-title">动态与影像</div>
+    <div class="wc-desc">节奏、转场与镜头语言共同构建可被记住的动态体验。</div>
+  </div>
+  <footer class="foot">
+    <img data-src="images/figma-home/lower-footer.png" alt="" loading="lazy" decoding="async">
+    <div class="foot-gx">gongxun</div>
+    <div class="foot-contact">联系我
+TEL: 113975176591
+WECHAT:
+E-MAIL:1793312947@QQ.COM
+返回首页</div>
+    <div class="foot-email">1793312947@qq.com</div>
+  </footer>
+</div>
+</main>
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting){
+        var im=en.target;
+        if(im.dataset&&im.dataset.src){im.src=im.dataset.src;im.removeAttribute('data-src');}
+        io.unobserve(im);
+      }
+    });
+  },{rootMargin:'350px 0px'});
+  function reg(n){if(n&&n.nodeType===1){if(n.tagName==='IMG'&&n.dataset&&n.dataset.src)io.observe(n);if(n.querySelectorAll)n.querySelectorAll('img[data-src]').forEach(function(im){io.observe(im);});}}
+  document.querySelectorAll('img[data-src]').forEach(function(im){io.observe(im);});
+  new MutationObserver(function(muts){
+    muts.forEach(function(m){m.addedNodes&&m.addedNodes.forEach(reg);});
+  }).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+<script type="module">
+import * as THREE from'three';
+import{OrbitControls}from'three/addons/controls/OrbitControls.js';
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(31,innerWidth/innerHeight,.1,100);
+camera.position.set(11.2,0.4,18.0);
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,canvas:document.getElementById('stage3d')});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.setClearColor(0x000000,0);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+
+scene.add(new THREE.HemisphereLight(0xffffff,0xc7c9cc,2.5));
+const key=new THREE.DirectionalLight(0xffffff,3.5);key.position.set(6,10,9);scene.add(key);
+const fill=new THREE.DirectionalLight(0xdbe3ef,1.4);fill.position.set(-8,3,-7);scene.add(fill);
+const rig=new THREE.Group();scene.add(rig);
+
+const trunkMat=new THREE.MeshStandardMaterial({color:0xb9ff12,roughness:.82,metalness:0}),
+branchMat=new THREE.MeshStandardMaterial({color:0xa9ef00,roughness:.86,metalness:0}),
+thornMat=new THREE.MeshStandardMaterial({color:0xa3e900,roughness:.88,metalness:0}),
+budMat=new THREE.MeshStandardMaterial({color:0xf0b9f3,roughness:.88,metalness:0});
+
+function cylinderSeg(a,b,r,mat,radial=18){
+ const d=new THREE.Vector3().subVectors(b,a),m=new THREE.Vector3().addVectors(a,b).multiplyScalar(.5);
+ const mesh=new THREE.Mesh(new THREE.CylinderGeometry(r*.84,r,d.length(),radial),mat);
+ mesh.position.copy(m);
+ mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.clone().normalize());
+ rig.add(mesh);return mesh;
+}
+const trunkPts=[[-.28,-5.25,.02],[-.18,-3.75,.04],[.08,-2.35,-.03],[-.15,-.9,.02],[.08,.55,-.02],[-.12,2,.03],[.1,3.5,-.02],[.3,5.15,.02]].map(p=>new THREE.Vector3(...p));
+for(let i=0;i<trunkPts.length-1;i++)cylinderSeg(trunkPts[i],trunkPts[i+1],.145-i*.007,trunkMat,22);
+function trunkX(y){for(let i=0;i<trunkPts.length-1;i++){const a=trunkPts[i],b=trunkPts[i+1];if(y>=a.y&&y<=b.y)return THREE.MathUtils.lerp(a.x,b.x,(y-a.y)/(b.y-a.y));}return 0;}
+[-4.72,-3.48,-2.12,-.72,.62,1.78,3.08,4.28].forEach((y,i)=>{
+ const an=i*2.37+.42,rad=new THREE.Vector3(Math.cos(an),0,Math.sin(an));
+ const base=new THREE.Vector3(trunkX(y),y,0).addScaledVector(rad,.11);
+ const tip=base.clone().addScaledVector(rad,.38);tip.y+=i%2?.07:.12;
+ const d=new THREE.Vector3().subVectors(tip,base);
+ const th=new THREE.Mesh(new THREE.ConeGeometry(.075,d.length(),5),thornMat);
+ th.position.addVectors(base,tip).multiplyScalar(.5);
+ th.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());
+ rig.add(th);
+});
+
+const leaves=[
+ {y:4.88,a:2.98,w:1.02,h:1.02,type:'circle',tilt:.13,roll:-.08,ci:1,side:-1},
+ {y:3.98,a:-.08,w:1.03,h:.98,type:'round',map:'mint',tilt:-.14,roll:.1,ci:0,side:1},
+ {y:2.92,a:1.18,w:2.2,h:1.34,type:'round',map:'orange-card',tilt:.2,roll:-.17,bud:1,ci:2,side:1},
+ {y:2.30,a:3.48,w:2.46,h:1.56,type:'greenleaf',tilt:-.19,roll:.14,ci:3,side:-1},
+ {y:1.18,a:-.38,w:3.3,h:2.07,type:'rabbit',map:'rabbit',tilt:.15,roll:-.09,bud:1,ci:4,side:1},
+ {y:-.12,a:2.38,w:3.05,h:2.07,type:'bluepoly',tilt:-.17,roll:.12,bud:1,ci:5,side:-1},
+ {y:-1.52,a:1.08,w:1.72,h:1.72,type:'circle',map:'fire',tilt:.16,roll:-.07,bud:1,ci:7,side:1},
+ {y:-2.92,a:3.08,w:1.02,h:1.02,type:'circle',map:'minus',tilt:-.14,roll:.09,ci:8,side:-1},
+ {y:-4.28,a:-.62,w:1.52,h:1.1,type:'arrowpoly',tilt:.18,roll:.16,ci:6,side:1}
+];
+const panelColors=[0xfff78e,0xcfffd4,0xffffff,0xb3e900,0xffb820,0x6ed8ff,0xffc7e1,0x7e61ff,0x5faafe];
+
+const details=[
+ {t:'关于我 / 视觉设计师',m:'2026 届应届 ｜ 坐标北京',b:[
+  '以 3D 路标串联整个作品集导航，拖动路牌可以旋转，点击路牌查看对应板块',
+  '方向覆盖视觉设计、品牌设计与 AIGC 创意生产，跟着路标依次探索',
+  '底部 PORTFOLIO 大字 O 里的头像就是我本人']},
+ {t:'导航 / 点击路牌聚焦',m:'拖动水平旋转 ｜ 单击查看详情',b:[
+  '单击任意路牌：镜头推近聚焦，背景虚化并展开文字介绍',
+  '继续单击其他路牌可直接切换详情内容',
+  '点击空白处退出详情模式，返回全景视图']},
+ {t:'美团大众点评 / 品牌营销设计师/实习',m:'时间：2025.03 - 2025.05 ｜ 累计落地项目：15+ ｜ 侧重点：整合营销全案 + 活动玩法页面',b:[
+  '整合营销全案：洞察"携宠出游"新兴生活方式，联合皇家宠物食品品牌合作，针对有宠人群设计线上活动页与线下《住玩攻略》地图（宠物友好酒店+玩乐场所），传递"宠物友好"品牌形象，活动UV-CTR达0.72%',
+  '活动玩法页面：从0到1完成多场景活动视觉策略与"收集贴纸"任务玩法页面设计',
+  '活动KV与长图设计：负责解压n重奏、松江美食节、江西小炒等4个活动的头图KV与长图页面设计，其中松江美食节活动页曝光PV20万+、任务参与次数10万+，以动态视觉强化内容吸引力']},
+ {t:'BRAND MARKETING / 品牌营销',m:'品牌设计 ｜ 2024 – 2026',b:[
+  '品牌 VI 系统：标志、色彩、字体与应用规范搭建',
+  '包装设计：结构、材质与印刷工艺全程跟进',
+  'IP 形象与周边：从角色设定到实物打样落地']},
+ {t:'美团 / 品牌创意设计师/实习',m:'时间：2025.06 - 2025.08 ｜ 累计落地项目：20+ ｜ 侧重点：AIGC设计提效 + 品牌文化实体产品',b:[
+  '教师节全案视觉：主导2025教师节活动设计，AIGC工具2天产出3版KV一次性通过，完成30+物料延展',
+  'AIGC流程提效：团队AIGC核心应用者，设计可复用AI模板赋能非设计人员快速产出',
+  '文化实体产品：主导文化贴纸、玩具包装等实体产品设计，全程跟进印刷生产与质量把控',
+  'AI视频生成：利用AI视频生成公众号动态图标系统，参与袋鼠大艺术家宣传片AI视频分镜与转场设计']},
+ {t:'剪映 / 产品体验设计师/工作',m:'时间：2026.7 - 至今+2025.11 -2026.2 ｜ 累计落地项目：10+ ｜ 侧重点：商业化活动视觉 + UG增长视觉',b:[
+  '商业化活动视觉：负责剪映春节会员活动、剪映×即梦联合会员及 Dreamina 海外会员折扣等项目，完成活动主视觉、会员页面、营销弹窗与多状态界面设计，强化折扣、权益与分享奖励的视觉传达。',
+  'UG增长视觉：负责剪映“智能去水词”投放承接弹窗及 Dreamina Seedance 2.0/2.5 模型促活项目，输出静态图、GIF、EDM与Landing Page，将产品功能和模型能力转译为直观卖点。',
+  '外部渠道视觉：负责剪映PC联想商店系列Banner设计，围绕产品功能、品牌心智与教程内容完成多尺寸适配，支持约 1.85亿曝光资源上线。',
+  'aigc视觉体系沉淀：基于高频设计场景沉淀营销模板、人物素材与视觉组件，探索AIGC辅助人物生成与系列物料延展，提升视觉一致性和复用效率。']},
+ {t:'PROJECTS / 项目实践',m:'项目经历 ｜ 2023 – 2026',b:[
+  '校园与公益项目：用设计解决真实的传播问题',
+  '跨界协作：与插画、摄影、开发团队联合创作',
+  '设计竞赛：多项竞赛入围与获奖经历']},
+ {t:'网易雷火工作室 / 品牌营销设计师/实习',m:'时间：2024.06 - 2024.11 ｜ 累计落地项目：30+ ｜ 侧重点：游戏IP营销物料 + 视觉资产管理',b:[
+  '游戏IP宣发物料：对接《永劫无间》等3个游戏IP，独立完成角色宣传卡、预热海报、线下展架等物料',
+  '视觉资产管理：分类归档200+视觉素材搭建团队素材库，助力设计效率提升30%',
+  '游戏周边设计：主导《永劫无间》CP30周边设计，获玩家社群高频转发，强化用户粘性']},
+ {t:'能力矩阵 / SKILLS',m:'工具与方法',b:[
+  '平面设计：Photoshop / Illustrator / Figma',
+  '三维与动效：Blender / Three.js / C4D 基础',
+  'AI 工具：Midjourney / 即梦 / AIGC 视频',
+  '设计方法：品牌策略 / 视觉传达 / 印刷工艺']},
+ {t:'OTHER DESIGN / 其他设计',m:'插画与实验',b:[
+  '手绘插画与涂鸦：个人化的兴趣表达',
+  '实验性版式：打破网格的自由排版探索',
+  '摄影记录：生活里的色彩与构图采集']}
+];
+
+function panelShape(type,w,h,g=0){
+ const s=new THREE.Shape(),W=w/2+g,H=h/2+g;
+ if(type==='circle'){s.absarc(0,0,W,0,Math.PI*2);return s;}
+ if(type==='round'){const r=Math.min(W,H)*.18;s.moveTo(-W+r,-H);s.lineTo(W-r,-H);s.quadraticCurveTo(W,-H,W,-H+r);s.lineTo(W,H-r);s.quadraticCurveTo(W,H,W-r,H);s.lineTo(-W+r,H);s.quadraticCurveTo(-W,H,-W,H-r);s.lineTo(-W,-H+r);s.quadraticCurveTo(-W,-H,-W+r,-H);s.closePath();return s;}
+ let pts=[[-1,0],[-.66,-.76],[0,-1],[.66,-.76],[1,0],[.66,.76],[0,1],[-.66,.76]];
+ if(type==='greenleaf'||type==='arrowpoly')pts=[[-1,0],[-.56,-1],[.56,-1],[1,0],[.56,1],[-.56,1]];
+ pts.forEach((p,i)=>{const x=p[0]*W,y=p[1]*H;i?s.lineTo(x,y):s.moveTo(x,y);});
+ s.closePath();return s;
+}
+function panelGeo(type,w,h,g=0){return new THREE.ShapeGeometry(panelShape(type,w,h,g),48);}
+function setUV(g,w,h){const p=g.attributes.position,u=g.attributes.uv;for(let i=0;i<p.count;i++)u.setXY(i,p.getX(i)/w+.5,p.getY(i)/h+.5);u.needsUpdate=true;return g;}
+
+const mapLoader=new THREE.TextureLoader(),maps={};
+['mint','orange-card','rabbit','fire','minus','arrow-g','capcut-logo','shapes-symbols'].forEach(n=>{
+ const t=mapLoader.load('images/vine/'+n+'.png');
+ t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;maps[n]=t;
+});
+
+function barBetween(a,b,r1,r2,mat){
+  const v=new THREE.Vector3().subVectors(b,a),l=v.length();
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r2,r1,l,10),mat);
+  m.position.copy(a).addScaledVector(v,.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.clone().normalize());
+  return m;
+}
+const clickables=[],armList=[];
+leaves.forEach((s,i)=>{
+ const col=panelColors[i];
+ const arm=new THREE.Group();
+ arm.position.set(trunkX(s.y),s.y,0);
+ arm.rotation.y=-s.a;
+ arm.userData.baseRotY=-s.a;
+ rig.add(arm);armList.push(arm);
+ const reach=new THREE.Group();arm.add(reach);arm.userData.reach=reach;
+ const lx=s.w*.5+.045,ly=s.roll*.28;
+ reach.add(barBetween(new THREE.Vector3(0,0,0),new THREE.Vector3(lx,ly,0),.075,.05,branchMat));
+ const leaf=new THREE.Group();
+ leaf.position.set(lx,ly,0);
+ leaf.rotation.set(s.tilt,0,s.roll);
+ leaf.userData.baseZ=0;
+ reach.add(leaf);
+ const bodyGeo=new THREE.ExtrudeGeometry(panelShape(s.type,s.w,s.h),{depth:.13,bevelEnabled:true,bevelSize:.014,bevelThickness:.014,bevelSegments:3,curveSegments:48});
+ bodyGeo.center();
+ const body=new THREE.Mesh(bodyGeo,new THREE.MeshStandardMaterial({color:col,roughness:.9,metalness:0}));
+ leaf.add(body);
+ const fg=setUV(panelGeo(s.type,s.w,s.h),s.w,s.h);
+ const front=new THREE.Mesh(fg,new THREE.MeshStandardMaterial(s.map?{map:maps[s.map],color:0xffffff,transparent:true,alphaTest:.01,roughness:.94,metalness:0}:{color:col,roughness:.94,metalness:0}));
+ front.position.z=.084;leaf.add(front);
+ if(s.type==='greenleaf'){
+  const symMat=new THREE.MeshStandardMaterial({map:maps['shapes-symbols'],color:0xffffff,transparent:true,alphaTest:.01,roughness:.94,metalness:0});
+  const sym=new THREE.Mesh(new THREE.PlaneGeometry(2.06,.79),symMat);
+  sym.position.z=.088;leaf.add(sym);
+  sym.userData.sign=leaf;sym.userData.idx=i;clickables.push(sym);
+  const symB=new THREE.Mesh(new THREE.PlaneGeometry(2.06,.79),symMat);
+  symB.position.z=-.088;symB.rotation.y=Math.PI;leaf.add(symB);
+  symB.userData.sign=leaf;symB.userData.idx=i;clickables.push(symB);
+ }
+ if(s.type==='bluepoly'){
+  const logoMat=new THREE.MeshStandardMaterial({map:maps['capcut-logo'],color:0xffffff,transparent:true,alphaTest:.01,roughness:.94,metalness:0});
+  const logo=new THREE.Mesh(new THREE.PlaneGeometry(1.55,1.21),logoMat);
+  logo.position.z=.088;leaf.add(logo);
+  logo.userData.sign=leaf;logo.userData.idx=i;clickables.push(logo);
+  const logoB=new THREE.Mesh(new THREE.PlaneGeometry(1.55,1.21),logoMat);
+  logoB.position.z=-.088;logoB.rotation.y=Math.PI;leaf.add(logoB);
+  logoB.userData.sign=leaf;logoB.userData.idx=i;clickables.push(logoB);
+ }
+ if(s.type==='arrowpoly'){
+  const arMat=new THREE.MeshStandardMaterial({map:maps['arrow-g'],color:0xffffff,transparent:true,alphaTest:.01,roughness:.94,metalness:0});
+  const ar=new THREE.Mesh(new THREE.PlaneGeometry(s.w,s.h),arMat);
+  ar.position.z=.088;ar.rotation.z=-.386;leaf.add(ar);
+  ar.userData.sign=leaf;ar.userData.idx=i;clickables.push(ar);
+  const arB=new THREE.Mesh(new THREE.PlaneGeometry(s.w,s.h),arMat);
+  arB.position.z=-.088;arB.rotation.set(0,Math.PI,Math.PI-.386);leaf.add(arB);
+  arB.userData.sign=leaf;arB.userData.idx=i;clickables.push(arB);
+ }
+ const rear=new THREE.Mesh(fg,new THREE.MeshStandardMaterial(s.map?{map:maps[s.map],color:0xffffff,transparent:true,alphaTest:.01,roughness:.94,metalness:0}:{color:col,roughness:.95,metalness:0}));
+ rear.position.z=-.084;rear.rotation.y=Math.PI;leaf.add(rear);
+ [body,front,rear].forEach(o=>{o.userData.sign=leaf;o.userData.idx=i;clickables.push(o);});
+ if(s.bud){
+  const bud=new THREE.Mesh(new THREE.SphereGeometry(.12,20,16),budMat);
+  bud.position.set(s.w+.185,ly,0);
+  reach.add(bud);
+ }
+});
+
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.enablePan=false;
+controls.target.set(0,.22,0);
+controls.minDistance=10;controls.maxDistance=34;
+controls.minPolarAngle=controls.maxPolarAngle=Math.PI/2;
+controls.update();
+
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
+let down={x:0,y:0},focus=null,anim=null,saved=null,mode='idle';
+const panel=document.getElementById('detailPanel'),pTitle=document.getElementById('dTitle'),pMeta=document.getElementById('dMeta'),pBody=document.getElementById('dBody');
+const ease=t=>1-Math.pow(1-t,3);
+const state=()=>({cam:camera.position.clone(),target:controls.target.clone(),rig:rig.position.clone()});
+let popObj=null;
+let idleState=null;
+function tween(to,done){const from=state(),start=performance.now(),pop=popObj,pz=pop?pop.obj.position.z:0;anim={step(now){const t=Math.min(1,(now-start)/850),e=ease(t);camera.position.lerpVectors(from.cam,to.cam,e);controls.target.lerpVectors(from.target,to.target,e);rig.position.lerpVectors(from.rig,to.rig,e);if(pop)pop.obj.position.z=pz+(pop.tz-pz)*e;camera.lookAt(controls.target);if(t===1){anim=null;done?.()}}}}
+function signFrame(sign,rigTo){
+  const center=new THREE.Vector3();sign.getWorldPosition(center);
+  center.sub(rig.position).add(rigTo);
+  const normal=new THREE.Vector3(0,0,1).applyQuaternion(sign.getWorldQuaternion(new THREE.Quaternion())).normalize();
+  const right=new THREE.Vector3().crossVectors(normal,camera.up).negate().normalize();
+  const cam=center.clone().addScaledVector(normal,4.9).addScaledVector(right,.55);
+  cam.y=center.y+.05;
+  const target=center.clone().addScaledVector(right,1.3);
+  return{cam,target,right};
+}
+function fillPanel(idx){
+  const d=details[idx]||details[0];
+  pTitle.textContent=d.t;
+  pMeta.textContent=d.m;
+  pBody.innerHTML=d.b.map(x=>`<p class="db">• ${x}</p>`).join('');
+}
+function enterDetail(idx,sign){
+  stopBloom();
+  if(mode==='idle')idleState=state();
+  if(popObj&&popObj.obj!==sign){popObj.obj.position.z=popObj.obj.userData.baseZ??0;popObj=null}
+  focus=sign;mode='detail';controls.enabled=false;
+  fillPanel(leaves[idx].ci);
+  panel.classList.remove('side-l');panel.classList.add('side-r');
+  document.body.classList.add('detail-on');
+  popObj={obj:sign,tz:(sign.userData.baseZ??0)+.8};
+  const normal=new THREE.Vector3(0,0,1).applyQuaternion(sign.getWorldQuaternion(new THREE.Quaternion())).normalize();
+  const screenRight=new THREE.Vector3().crossVectors(normal,camera.up).negate().normalize();
+  const rigTo=idleState.rig.clone().addScaledVector(screenRight,-1.8);
+  const{cam,target}=signFrame(sign,rigTo);
+  tween({cam,target,rig:rigTo});
+}
+function restore(){
+  if(!focus||!idleState)return;
+  const back=focus;
+  popObj={obj:back,tz:back.userData.baseZ??0};focus=null;mode='idle';
+  document.body.classList.remove('detail-on');
+  const restoreTo=idleState;
+  tween(restoreTo,()=>{
+    controls.enabled=true;controls.update();
+    idleState=null;popObj=null;
+  });
+}
+function pickAt(cx,cy){
+  pointer.x=cx/innerWidth*2-1;pointer.y=-(cy/innerHeight)*2+1;
+  raycaster.setFromCamera(pointer,camera);
+  return raycaster.intersectObjects(clickables,false)[0];
+}
+
+renderer.domElement.addEventListener('pointerdown',e=>down={x:e.clientX,y:e.clientY});
+renderer.domElement.addEventListener('pointerup',e=>{
+  if(Math.hypot(e.clientX-down.x,e.clientY-down.y)>7||anim)return;
+  const hit=pickAt(e.clientX,e.clientY);
+  if(hit)enterDetail(hit.object.userData.idx,hit.object.userData.sign);
+  else if(mode==='detail')restore();
+});
+
+const easeInQ=t=>t*t,backOut=t=>{const c=2.2;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)},easeOut=t=>1-Math.pow(1-t,3);
+let bloom=null,bloomCur=0;
+function applyBloom(g){armList.forEach(arm=>{arm.userData.reach.scale.setScalar(1-g*.64);arm.rotation.y=arm.userData.baseRotY;});}
+function stepBloom(now){
+  if(!bloom)return;
+  if(bloom.ph===0){const p=Math.min(1,(now-bloom.t0)/430);bloomCur=easeInQ(p);if(p>=1){bloom.ph=1;bloom.t0=now;}}
+  else if(bloom.ph===1){const p=Math.min(1,(now-bloom.t0)/720);bloomCur=1-backOut(p);if(p>=1){bloomCur=0;bloom=null;}}
+  else{const p=Math.min(1,(now-bloom.t0)/380);bloomCur=bloom.g0*(1-easeOut(p));if(p>=1){bloomCur=0;bloom=null;}}
+  applyBloom(bloomCur);
+}
+function startBloom(){if(mode!=='idle'||bloom)return;bloom={ph:0,t0:performance.now()};}
+function stopBloom(){if(!bloom||bloom.ph===2)return;bloom={ph:2,t0:performance.now(),g0:bloomCur};}
+renderer.domElement.addEventListener('pointerenter',startBloom);
+renderer.domElement.addEventListener('pointerleave',stopBloom);
+
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+  needsRender=true;
+  fitBoard();
+  const pts=snapPoints();
+  window.scrollTo(0,pts[Math.min(snapIdx,pts.length-1)]);
+});
+
+const board=document.querySelector('.board'),lowerEl=document.getElementById('lower'),lowerInner=document.getElementById('lowerInner');
+function fitBoard(){const s=Math.min(innerWidth/1920,1);board.style.transform=`translateX(-50%) scale(${s})`;lowerInner.style.transform=`translateX(-50%) scale(${s})`;lowerEl.style.height=`${5558*s}px`}
+fitBoard();
+
+const scrollArrow=document.getElementById('scrollArrow');
+const PAGE_H=1002,LOWER_PAGES=6,LOWER_H=5558;
+function snapPoints(){
+  const sc=Math.min(innerWidth/1920,1),ih=innerHeight,max=LOWER_H*sc;
+  const raw=[0];
+  for(let j=1;j<LOWER_PAGES;j++)raw.push(Math.min(ih+(j-1)*PAGE_H*sc,max));
+  raw.push(max);
+  const thr=PAGE_H*sc*0.5;
+  const out=[];
+  raw.forEach((p,i)=>{
+    if(i===0){out.push(p);return;}
+    if(Math.abs(p-out[out.length-1])<thr){if(i===raw.length-1)out[out.length-1]=p;}
+    else out.push(p);
+  });
+  return out;
+}
+let snapIdx=0,snapLock=false;
+function setArrow(on){scrollArrow.style.opacity=on?'1':'0';scrollArrow.style.pointerEvents=on?'auto':'none';}
+function goSnap(i){
+  const pts=snapPoints();
+  i=Math.max(0,Math.min(pts.length-1,i));
+  if(i===snapIdx&&Math.abs(scrollY-pts[i])<4)return;
+  snapIdx=i;snapLock=true;setArrow(i===0);
+  window.scrollTo({top:pts[i],behavior:'smooth'});
+  setTimeout(()=>snapLock=false,900);
+}
+const pdfOpen=()=>{const b=document.getElementById('pdfBackdrop');return !!b&&b.classList.contains('open');};
+addEventListener('wheel',e=>{
+  if(pdfOpen())return;
+  if(e.ctrlKey||snapLock||Math.abs(e.deltaY)<10)return;
+  e.preventDefault();
+  goSnap(snapIdx+(e.deltaY>0?1:-1));
+},{passive:false});
+let touchY0=0;
+addEventListener('touchstart',e=>touchY0=e.touches[0].clientY,{passive:true});
+addEventListener('touchmove',e=>{if(!pdfOpen())e.preventDefault();},{passive:false});
+addEventListener('touchend',e=>{
+  if(pdfOpen())return;
+  const d=touchY0-e.changedTouches[0].clientY;
+  if(Math.abs(d)>44)goSnap(snapIdx+(d>0?1:-1));
+},{passive:true});
+addEventListener('keydown',e=>{
+  if(pdfOpen())return;
+  if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){e.preventDefault();goSnap(snapIdx+1);}
+  else if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();goSnap(snapIdx-1);}
+});
+scrollArrow.addEventListener('click',()=>goSnap(1));
+const _sq=new URLSearchParams(location.search).get('screen');
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+if(_sq!==null){
+  const _n=+_sq;
+  const _jump=()=>{const pts=snapPoints();if(pts[_n]!==undefined){snapIdx=_n;setArrow(_n!==0);window.scrollTo(0,pts[_n]);}};
+  _jump();addEventListener('load',()=>{_jump();setTimeout(_jump,300);setTimeout(_jump,900);});
+}else{
+  const _top=()=>{snapIdx=0;setArrow(false);window.scrollTo(0,0);};
+  _top();addEventListener('load',()=>{_top();setTimeout(_top,300);setTimeout(_top,900);});
+}
+let scrollSyncTimer;
+addEventListener('scroll',()=>{
+  if(mode==='detail'){restore();return;}
+  clearTimeout(scrollSyncTimer);
+  scrollSyncTimer=setTimeout(()=>{
+    if(snapLock)return;
+    const pts=snapPoints();let best=0,bd=Infinity;
+    pts.forEach((p,i)=>{const d=Math.abs(p-scrollY);if(d<bd){bd=d;best=i;}});
+    snapIdx=best;setArrow(best===0);
+  },160);
+});
+
+let needsRender=true;
+controls.addEventListener('change',()=>needsRender=true);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)needsRender=true;});
+function loop(now){
+  requestAnimationFrame(loop);
+  if(anim){anim.step(now);needsRender=true;}else controls.update();
+  stepBloom(now);
+  if(bloom)needsRender=true;
+  if(needsRender){renderer.render(scene,camera);needsRender=false;}
+}
+requestAnimationFrame(loop);
+</script>
+<script>
+(function(){
+  const layer=document.getElementById('sceneLayer');
+  const D='images/figma-home/scene/';
+  const L=[
+    ['grass.png',1015.3,413.1,812.0,266.5,1,null],
+    ['board-cyan.png',1020.6,139.0,342.5,370.0,2,-16],
+    ['board-green.png',1434.6,112.4,381.5,389.5,3,16],
+    ['icon-capcut.png',1220.7,84.4,389.5,389.5,4,null],
+    ['icon-peach.png',1570.2,66.6,118.0,118.0,5,70],
+    ['icon-yellow.png',1079.5,46.9,170.0,170.0,5,-70],
+    ['pole.png',1528.3,253.4,147.5,266.0,6,null],
+    ['girl-loop-transparent.gif',1107.9,219.2,285.5,285.5,7,null],
+  ];
+  const PX=1415.25,PY=311.25;
+  const fans=[];
+  L.forEach(([f,x,y,w,h,z,spin])=>{
+    const im=document.createElement('img');
+    im.className='scene-img'+(spin!==null?' scene-fan':'');
+    im.loading='eager';im.decoding='async';
+    im.src=D+f+(f==='grass.png'?'?v=20260920-user-grass':'?v=20260920-motion');im.alt='';im.draggable=false;
+    im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
+    layer.appendChild(im);
+    if(spin!==null){
+      const ox=PX-(x+w/2),oy=PY-(y+h/2);
+      const icon=Math.abs(spin)===70;
+      im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
+      im._tOpen='translate(0,0) rotate(0deg) scale(1)';
+      im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
+      im.style.transition='none';
+      im.style.transform=im._tOpen;
+      fans.push(im);
+    }
+  });
+  const hit=document.getElementById('sceneHit');
+  let replaying=false;
+  function replayScene(){
+    if(replaying)return;
+    replaying=true;
+    fans.forEach(im=>{im.style.transition='none';im.style.transform=im._tCollapsed;});
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      fans.forEach(im=>{im.style.transition=im._trOpen;im.style.transform=im._tOpen;});
+      setTimeout(()=>{replaying=false;},800);
+    }));
+  }
+  hit.addEventListener('pointerenter',replayScene);
+  hit.addEventListener('focusin',replayScene);
+})();
+</script>
+<script>
+(function(){
+  const layer=document.getElementById('pieceLayer');
+  const DIR='images/figma-home/pieces/';
+  const P=[
+    ['p01.png',251.0,702.1,310.5,230.0,null],
+    ['p02.png',528.4,423.5,335.0,515.0],
+    ['p03.png',880.0,721.4,266.0,200.0,null],
+    ['p04.png',1054.5,514.7,305.5,287.5,null],
+    ['p05.png',-13.0,557.4,274.0,390.5,null],
+    ['p12.png',1281.6,399.2,412.0,346.5,null],
+    ['p06.png',936.9,335.0,369.0,169.0],
+    ['p07.png',1161.3,811.7,117.5,108.5],
+    ['p08.png',1335.0,735.0,284.0,185.0,null],
+    ['p09.png',852.8,514.7,191.5,191.5,null],
+    ['p10.png',433.0,641.4,129.0,129.0],
+    ['p11.png',1592.8,633.2,312.5,312.5],
+    ['p13.png',135.3,402.1,361.4,312.1],
+  ];
+  const elds=P.map(([f,x0,y0,w,h,cf])=>{
+    const wrap=document.createElement('div');
+    wrap.className='piece-wrap';wrap.style.width=w+'px';wrap.style.height=h+'px';
+    const g=document.createElement('img');g.className='piece pc-gray';g.loading='lazy';g.decoding='async';g.dataset.src=DIR+f;
+    const c=document.createElement('img');c.className='piece pc-color';c.loading='lazy';c.decoding='async';c.dataset.src=DIR+(cf||f);
+    wrap.appendChild(g);wrap.appendChild(c);layer.appendChild(wrap);
+    const sx=x0+(Math.random()-0.5)*120,sy=-h-250-Math.random()*500,sr=(Math.random()-0.5)*140;
+    wrap.style.transform=`translate(${sx}px,${sy}px) rotate(${sr}deg)`;
+    return {wrap,x0,y0,sx,sy,sr};
+  });
+  let played=false;
+  function reset(){
+    elds.forEach(e=>{e.wrap.getAnimations().forEach(a=>a.cancel());e.wrap.style.transform=`translate(${e.sx}px,${e.sy}px) rotate(${e.sr}deg)`;});
+    played=false;
+  }
+  function drop(){
+    played=true;
+    elds.forEach((e,i)=>{
+      e.wrap.animate([
+        {transform:`translate(${e.sx}px,${e.sy}px) rotate(${e.sr}deg)`,easing:'cubic-bezier(.5,.02,.8,.4)'},
+        {transform:`translate(${e.x0}px,${e.y0+30}px) rotate(10deg)`,offset:.74},
+        {transform:`translate(${e.x0}px,${e.y0-12}px) rotate(-3deg)`,offset:.9,easing:'cubic-bezier(.3,.7,.4,1.35)'},
+        {transform:`translate(${e.x0}px,${e.y0}px) rotate(0deg)`,offset:1}
+      ],{duration:850+Math.random()*300,delay:i*130+Math.random()*120,fill:'forwards'});
+    });
+  }
+  let t;
+  addEventListener('scroll',()=>{
+    clearTimeout(t);
+    t=setTimeout(()=>{
+      const ih=innerHeight,sc=Math.min(innerWidth/1920,1);
+      const on2=scrollY>=ih*0.6&&scrollY<ih+1002*sc*0.55;
+      if(on2&&!played)drop();
+      else if(!on2&&played)reset();
+    },120);
+  });
+})();
+</script>
+<script>
+(function(){
+  const maskLayer=document.getElementById('flowerMask');
+  const layer=document.getElementById('flowerLayer');
+  const FD='images/figma-home/flowers/';
+  const FV='?v=20260901b';
+  const gLabels=document.querySelectorAll('.garden-label');
+  const gPaths=document.querySelectorAll('#gardenSvg path');
+  const gDots=document.querySelectorAll('#gardenSvg circle');
+  const gTitle=document.querySelector('.garden-title');
+  const FLOWERS=[
+    {id:'dog',z:1,pdf:'pet-sleeper.pdf',title:'大众点评 · 宠物试睡官活动长图设计',parts:[
+      ['dog-bar.png',287.5,2544.3,292.0,108.5],
+      ['dog.png',315.8,2470.6,235.0,257.0]]},
+    {id:'iu',z:2,pdf:'mandi.pdf',title:'Māndi 公交盲盒 APP · UI 设计',parts:[
+      ['iu-card.png',690.0,2351.9,265.0,281.9],
+      ['iu.png',706.2,2399.9,236.0,214.0]]},
+    {id:'cloud',z:3,parts:[
+      ['cloud-body.png',878.0,2393.0,322.0,323.0],
+      ['cloud-inner.png',938.0,2454.0,203.0,203.0]]},
+    {id:'teacher',z:4,pdf:'teachers-day.pdf',title:'美团 · 教师节活动设计「点亮成长，聚光同行」',parts:[
+      ['teacher.png',595.0,2597.0,235.0,132.5]]},
+    {id:'ip',z:5,pdf:'wushan-wizards.pdf',title:'巫山十巫 · 数字 IP 文创设计 WUSHAN WIZARDS',parts:[
+      ['ip-circle.png',1334.6,2489.1,255.0,247.0]]},
+    {id:'star',z:6,pdf:'yummy.pdf',title:'YUMMY 巧克力情感化包装设计',parts:[
+      ['star.png',1166.0,2411.0,265.0,280.0]]},
+  ];
+  FLOWERS.forEach(fl=>{
+    let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+    fl.parts.forEach(p=>{x0=Math.min(x0,p[1]);y0=Math.min(y0,p[2]);x1=Math.max(x1,p[1]+p[3]);y1=Math.max(y1,p[2]+p[4]);});
+    const w=x1-x0,h=y1-y0;
+    const mk=new Image();
+    mk.alt='';mk.loading='lazy';mk.decoding='async';mk.dataset.src=FD+'mask-'+fl.id+'.png'+FV;
+    mk.style.left=x0+'px';mk.style.top=y0+'px';mk.style.width=w+'px';mk.style.height=h+'px';
+    maskLayer.appendChild(mk);
+    const wrap=document.createElement('div');
+    wrap.className='flower'+(fl.pdf?'':' nopdf');
+    wrap.style.left=x0+'px';wrap.style.top=y0+'px';wrap.style.width=w+'px';wrap.style.height=h+'px';wrap.style.zIndex=fl.z;
+    fl.parts.forEach(([f,x,y,pw,ph],i)=>{
+      const im=document.createElement('img');
+      im.alt='';im.loading='lazy';im.decoding='async';im.dataset.src=FD+f+FV;im.draggable=false;
+      im.style.left=(x-x0)+'px';im.style.top=(y-y0)+'px';im.style.width=pw+'px';im.style.height=ph+'px';im.style.zIndex=i+1;
+      wrap.appendChild(im);
+    });
+    layer.appendChild(wrap);
+    wrap.addEventListener('pointerenter',()=>{
+      wrap.getAnimations().forEach(a=>a.cancel());
+      wrap.animate(
+        [{transform:'rotate(0deg)'},{transform:'rotate(-10deg)',offset:.18},{transform:'rotate(8deg)',offset:.36},
+         {transform:'rotate(-6deg)',offset:.54},{transform:'rotate(4deg)',offset:.72},{transform:'rotate(0deg)'}],
+        {duration:850,easing:'ease-in-out'});
+    });
+    if(fl.pdf)wrap.addEventListener('click',()=>openPdf(fl.pdf,fl.title));
+  });
+  const pdfBackdrop=document.getElementById('pdfBackdrop'),pdfScroll=document.getElementById('pdfScroll'),
+        pdfWin=pdfBackdrop.querySelector('.pdf-win'),
+        pdfTitle=document.getElementById('pdfTitle'),pdfExt=document.getElementById('pdfExt');
+  let pdfToken=0,idleTimer=null;const pdfDocs={};
+  function wakeBar(){
+    pdfWin.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer=setTimeout(()=>pdfWin.classList.add('idle'),1800);
+  }
+  pdfWin.addEventListener('pointerdown',wakeBar);
+  let pdfJsPromise=null;
+  function loadPdfJs(){
+    if(window.pdfjsLib)return Promise.resolve(window.pdfjsLib);
+    if(pdfJsPromise)return pdfJsPromise;
+    pdfJsPromise=new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='vendor/pdf.min.js';
+      s.onload=()=>{
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc='vendor/pdf.worker.min.js';
+        res(window.pdfjsLib);
+      };
+      s.onerror=rej;
+      document.head.appendChild(s);
+    });
+    return pdfJsPromise;
+  }
+  async function showPdf(file,token){
+    pdfScroll.innerHTML='<div class="pdf-loading">PDF 加载中…</div>';
+    let doc=pdfDocs[file];
+    if(!doc){
+      try{
+        const pdfjs=await loadPdfJs();
+        doc=await pdfjs.getDocument({url:'pdfs/'+file,disableRange:true,disableStream:true}).promise;
+      }catch(err){
+        if(token!==pdfToken)return;
+        pdfScroll.innerHTML='';
+        const f=document.createElement('iframe');
+        f.className='pdf-fallback';f.src='pdfs/'+file;
+        pdfScroll.appendChild(f);
+        return;
+      }
+      if(token!==pdfToken)return;
+      pdfDocs[file]=doc;
+    }
+    if(token!==pdfToken)return;
+    pdfScroll.innerHTML='';
+    let contW=pdfScroll.clientWidth;
+    const pages=[];
+    for(let n=1;n<=doc.numPages;n++){
+      const page=await doc.getPage(n);
+      const base=page.getViewport({scale:1});
+      const el=document.createElement('div');
+      el.className='pdf-page';el.dataset.page=n;
+      el.style.width=contW+'px';
+      el.style.height=Math.round(contW*base.height/base.width)+'px';
+      pdfScroll.appendChild(el);
+      pages.push({el,page,base});
+    }
+    const contW2=pdfScroll.clientWidth;
+    if(contW2&&contW2!==contW){
+      contW=contW2;
+      pages.forEach(({el,base})=>{
+        el.style.width=contW+'px';
+        el.style.height=Math.round(contW*base.height/base.width)+'px';
+      });
+    }
+    pdfScroll.scrollTop=0;
+    async function drawPage(el){
+      const p=pages.find(x=>x.el===el);
+      if(!p||el.dataset.done)return;
+      el.dataset.done='1';
+      const dpr=Math.min(window.devicePixelRatio||1,2);
+      const vp=p.page.getViewport({scale:contW/p.base.width*dpr});
+      const c=document.createElement('canvas');
+      c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);
+      c.style.width=contW+'px';
+      el.style.height='auto';el.innerHTML='';el.appendChild(c);
+      try{await p.page.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;}catch(e){}
+    }
+    const io=new IntersectionObserver(es=>{
+      es.forEach(en=>{if(en.isIntersecting){io.unobserve(en.target);drawPage(en.target);}});
+    },{root:pdfScroll,rootMargin:'500px 0px'});
+    pages.forEach(p=>io.observe(p.el));
+  }
+  function openPdf(file,title){
+    pdfTitle.textContent=title;
+    pdfExt.href='pdfs/'+file;
+    pdfBackdrop.classList.add('open');
+    document.documentElement.classList.add('pdf-lock');
+    document.body.classList.add('pdf-lock');
+    wakeBar();
+    showPdf(file,++pdfToken);
+  }
+  function closePdf(){
+    if(!pdfBackdrop.classList.contains('open'))return;
+    pdfBackdrop.classList.remove('open');
+    document.documentElement.classList.remove('pdf-lock');
+    document.body.classList.remove('pdf-lock');
+    pdfWin.classList.remove('idle');
+    clearTimeout(idleTimer);
+    pdfToken++;
+    setTimeout(()=>{pdfScroll.innerHTML='';},300);
+  }
+  document.getElementById('pdfClose').addEventListener('click',closePdf);
+  pdfBackdrop.addEventListener('click',e=>{if(e.target===pdfBackdrop)closePdf();});
+  addEventListener('keydown',e=>{if(e.key==='Escape')closePdf();});
+  let gardenPlayed=false;
+  function playGarden(){
+    if(gardenPlayed)return;
+    gardenPlayed=true;
+    gTitle.classList.add('shown');
+    const order=[0,1,2,3,4,5];
+    for(let i=order.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      const t=order[i];order[i]=order[j];order[j]=t;
+    }
+    order.forEach((gi,k)=>{
+      setTimeout(()=>{
+        gLabels[gi].classList.add('shown');
+        gPaths[gi].classList.add('shown');
+        gDots[gi].classList.add('shown');
+      },550+k*300);
+    });
+  }
+  function checkGarden(){
+    if(gardenPlayed)return;
+    const r=gTitle.getBoundingClientRect();
+    if(r.top<innerHeight*0.35&&r.bottom>0)playGarden();
+  }
+  addEventListener('scroll',checkGarden,{passive:true});
+  addEventListener('resize',checkGarden);
+  addEventListener('load',checkGarden);
+  checkGarden();
+  setTimeout(checkGarden,300);
+  setTimeout(checkGarden,1000);
+  setTimeout(checkGarden,1600);
+})();
+</script>
+</body>
