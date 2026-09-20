@@ -771,7 +771,6 @@ requestAnimationFrame(loop);
   addEventListener('touchstart',prepare,{passive:true,once:true});
   addEventListener('scroll',sync,{passive:true});
   addEventListener('load',()=>{setTimeout(sync,350);setTimeout(sync,950);});
-  if(+(new URLSearchParams(location.search).get('screen'))>=1)prepare();
 })();
 </script>
 <script>
