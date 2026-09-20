@@ -7,13 +7,16 @@
 <title>gongxun · PORTFOLIO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="images/figma-home/portfolio-bg.jpg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden;background:#fff}
+html{scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
 body{font-family:"PingFang SC","PingFang TC",-apple-system,sans-serif;color:#F8FF3A}
-.hero{position:relative;height:100vh;overflow:hidden}
-.bg-full{position:absolute;inset:0;z-index:0;background:url('images/figma-home/portfolio-bg.jpg') center/cover no-repeat;transition:filter .6s ease,transform .6s ease}
+.hero{position:relative;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#099ff2}
+.bg-full{position:absolute;inset:-1px;z-index:0;background:url('images/figma-home/portfolio-bg.jpg') center/cover no-repeat;transition:filter .6s ease,transform .6s ease}
 body.detail-on .bg-full{filter:blur(18px) saturate(1.15);transform:scale(1.12)}
 #stage3d{position:absolute;inset:0;z-index:1;display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 #stage3d:active{cursor:grabbing}
