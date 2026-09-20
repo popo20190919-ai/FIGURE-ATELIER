@@ -155,7 +155,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <img class="sec1" data-src="images/figma-home/lower-sec1.png" alt="" loading="lazy" decoding="async">
   <img class="sec2" data-src="images/figma-home/lower-sec2.png" alt="" loading="lazy" decoding="async">
   <section class="profile-composition" id="profile" aria-label="个人简介">
-    <img class="profile-copy-img" src="images/figma-home/profile-copy.png?v=20260920" alt="龚珣个人简介" loading="eager" decoding="async">
+    <img class="profile-copy-img" data-src="images/figma-home/profile-copy.png?v=20260920" alt="龚珣个人简介" loading="lazy" decoding="async">
     <div id="sceneLayer"></div>
     <div class="scene-hit" id="sceneHit" tabindex="0" aria-label="右侧动态场景"></div>
   </section>
@@ -646,33 +646,27 @@ requestAnimationFrame(loop);
   ];
   const PX=1415.25,PY=311.25;
   const fans=[];
-  let loaded=false;
-  function loadScene(){
-    if(loaded)return;
-    loaded=true;
-    L.forEach(([f,x,y,w,h,z,spin])=>{
-      const im=document.createElement('img');
-      im.className='scene-img'+(spin!==null?' scene-fan':'');
-      im.loading='eager';im.decoding='async';
-      im.src=D+f+(f==='grass.png'?'?v=20260920-user-grass':'?v=20260920-motion');im.alt='';im.draggable=false;
-      im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
-      layer.appendChild(im);
-      if(spin!==null){
-        const ox=PX-(x+w/2),oy=PY-(y+h/2);
-        const icon=Math.abs(spin)===70;
-        im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
-        im._tOpen='translate(0,0) rotate(0deg) scale(1)';
-        im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
-        im.style.transition='none';
-        im.style.transform=im._tOpen;
-        fans.push(im);
-      }
-    });
-  }
+  L.forEach(([f,x,y,w,h,z,spin])=>{
+    const im=document.createElement('img');
+    im.className='scene-img'+(spin!==null?' scene-fan':'');
+    im.loading='eager';im.decoding='async';
+    im.src=D+f+(f==='grass.png'?'?v=20260920-user-grass':'?v=20260920-motion');im.alt='';im.draggable=false;
+    im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
+    layer.appendChild(im);
+    if(spin!==null){
+      const ox=PX-(x+w/2),oy=PY-(y+h/2);
+      const icon=Math.abs(spin)===70;
+      im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
+      im._tOpen='translate(0,0) rotate(0deg) scale(1)';
+      im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
+      im.style.transition='none';
+      im.style.transform=im._tOpen;
+      fans.push(im);
+    }
+  });
   const hit=document.getElementById('sceneHit');
   let replaying=false;
   function replayScene(){
-    loadScene();
     if(replaying)return;
     replaying=true;
     fans.forEach(im=>{im.style.transition='none';im.style.transform=im._tCollapsed;});
@@ -683,13 +677,6 @@ requestAnimationFrame(loop);
   }
   hit.addEventListener('pointerenter',replayScene);
   hit.addEventListener('focusin',replayScene);
-  const primeScene=()=>{if(scrollY>=innerHeight*.25)loadScene();};
-  addEventListener('wheel',e=>{if(e.deltaY>0)loadScene();},{passive:true});
-  addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' ')loadScene();});
-  addEventListener('touchstart',loadScene,{passive:true,once:true});
-  addEventListener('scroll',primeScene,{passive:true});
-  addEventListener('load',()=>{setTimeout(primeScene,350);setTimeout(primeScene,950);});
-  if(+(new URLSearchParams(location.search).get('screen'))>=1)loadScene();
 })();
 </script>
 <script>
@@ -737,40 +724,16 @@ requestAnimationFrame(loop);
       ],{duration:850+Math.random()*300,delay:i*130+Math.random()*120,fill:'forwards'});
     });
   }
-  function activate(im){
-    return new Promise(resolve=>{
-      if(im.complete&&im.naturalWidth){resolve();return;}
-      im.addEventListener('load',resolve,{once:true});
-      im.addEventListener('error',resolve,{once:true});
-      if(im.dataset.src){
-        im.loading='eager';
-        im.src=im.dataset.src;
-        im.removeAttribute('data-src');
-      }
-      if(im.complete)resolve();
-    });
-  }
-  let readyPromise=null;
-  function prepare(){
-    if(readyPromise)return readyPromise;
-    elds.forEach(e=>activate(e.wrap.querySelector('.pc-color')));
-    readyPromise=Promise.all(elds.map(e=>activate(e.wrap.querySelector('.pc-gray'))));
-    return readyPromise;
-  }
   let t;
-  function sync(){
+  addEventListener('scroll',()=>{
     clearTimeout(t);
     t=setTimeout(()=>{
-      const ih=innerHeight;
-      if(scrollY>=ih*.55&&!played)prepare().then(()=>{if(scrollY>=innerHeight*.55&&!played)drop();});
-      else if(scrollY<ih*.35&&played)reset();
-    },80);
-  }
-  addEventListener('wheel',e=>{if(e.deltaY>0)prepare();},{passive:true});
-  addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' ')prepare();});
-  addEventListener('touchstart',prepare,{passive:true,once:true});
-  addEventListener('scroll',sync,{passive:true});
-  addEventListener('load',()=>{setTimeout(sync,350);setTimeout(sync,950);});
+      const ih=innerHeight,sc=Math.min(innerWidth/1920,1);
+      const on2=scrollY>=ih*0.6&&scrollY<ih+1002*sc*0.55;
+      if(on2&&!played)drop();
+      else if(!on2&&played)reset();
+    },120);
+  });
 })();
 </script>
 <script>
