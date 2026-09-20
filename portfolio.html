@@ -741,48 +741,16 @@ requestAnimationFrame(loop);
       ],{duration:850+Math.random()*300,delay:i*130+Math.random()*120,fill:'forwards'});
     });
   }
-  function loadPiece(im){
-    return new Promise(resolve=>{
-      let settled=false;
-      const ready=()=>{
-        if(settled)return;
-        settled=true;
-        if(typeof im.decode==='function')Promise.race([im.decode().catch(()=>{}),new Promise(done=>setTimeout(done,300))]).then(resolve);
-        else resolve();
-      };
-      im.addEventListener('load',ready,{once:true});
-      im.addEventListener('error',ready,{once:true});
-      if(im.dataset.src){
-        im.loading='eager';
-        im.src=im.dataset.src;
-        im.removeAttribute('data-src');
-      }
-      if(im.complete)ready();
-    });
-  }
-  let inView=false,loadingPromise=null;
-  function prepareDrop(){
-    if(!loadingPromise){
-      elds.forEach(e=>loadPiece(e.wrap.querySelector('.pc-color')));
-      loadingPromise=Promise.all(elds.map(e=>loadPiece(e.wrap.querySelector('.pc-gray'))));
-    }
-    loadingPromise.then(()=>{if(inView&&!played)drop();});
-  }
-  const trigger=document.querySelector('.profile-composition');
-  function checkVisibility(){
-    const rect=trigger.getBoundingClientRect();
-    const visible=rect.bottom>=-100&&rect.top<=innerHeight+100;
-    if(visible===inView)return;
-    inView=visible;
-    if(visible)prepareDrop();
-    else if(played)reset();
-  }
-  addEventListener('scroll',checkVisibility,{passive:true});
-  addEventListener('resize',checkVisibility);
-  addEventListener('load',checkVisibility);
-  requestAnimationFrame(()=>requestAnimationFrame(checkVisibility));
-  setTimeout(checkVisibility,350);
-  setTimeout(checkVisibility,950);
+  let t;
+  addEventListener('scroll',()=>{
+    clearTimeout(t);
+    t=setTimeout(()=>{
+      const ih=innerHeight,sc=Math.min(innerWidth/1920,1);
+      const on2=scrollY>=ih*0.6&&scrollY<ih+1002*sc*0.55;
+      if(on2&&!played)drop();
+      else if(!on2&&played)reset();
+    },120);
+  });
 })();
 </script>
 <script>
