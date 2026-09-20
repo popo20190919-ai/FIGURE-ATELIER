@@ -7,9 +7,6 @@
 <title>gongxun · PORTFOLIO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="images/figma-home/portfolio-bg.jpg" fetchpriority="high">
-<link rel="modulepreload" href="vendor/three.module.js">
-<link rel="modulepreload" href="vendor/three.core.js">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -155,8 +152,8 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
 </div>
 <main class="lower" id="lower">
 <div class="lower-inner" id="lowerInner">
-  <img class="sec1" data-src="images/figma-home/lower-sec1.webp" alt="" loading="lazy" decoding="async">
-  <img class="sec2" data-src="images/figma-home/lower-sec2.webp" alt="" loading="lazy" decoding="async">
+  <img class="sec1" data-src="images/figma-home/lower-sec1.png" alt="" loading="lazy" decoding="async">
+  <img class="sec2" data-src="images/figma-home/lower-sec2.png" alt="" loading="lazy" decoding="async">
   <section class="profile-composition" id="profile" aria-label="个人简介">
     <img class="profile-copy-img" data-src="images/figma-home/profile-copy.png?v=20260920" alt="龚珣个人简介" loading="lazy" decoding="async">
     <div id="sceneLayer"></div>
@@ -168,7 +165,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <div id="flowerMask"></div>
   <div id="flowerLayer"></div>
   <div class="garden-blank"></div>
-  <img class="garden-base" data-src="images/figma-home/garden-base.webp?v=20260920-perf" alt="" loading="lazy" decoding="async">
+  <img class="garden-base" data-src="images/figma-home/garden-base.png?v=20260901b" alt="" loading="lazy" decoding="async">
   <div class="garden-title">🔑Key Projects</div>
   <svg id="gardenSvg" viewBox="0 0 1920 5558" xmlns="http://www.w3.org/2000/svg">
     <g stroke="#b5b5b5" stroke-width="2" fill="none">
@@ -195,8 +192,8 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <div class="garden-label" style="left:1232px;top:2236px;width:203px"><div class="zh">其他设计作品</div><div class="en">Internship design work</div></div>
   <div class="garden-label" style="left:1534px;top:2386px;width:148px"><div class="zh">IP设计作品</div><div class="en">IP Design Works</div></div>
   <div class="vibe-blank"></div>
-  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.webp" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成网站工作台" loading="lazy" decoding="async">
-  <img class="vibe-shot" data-src="images/figma-home/vibe-poster.webp" style="left:988px;top:3332px;width:743px;height:383px" alt="海报模板工坊" loading="lazy" decoding="async">
+  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.png" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成网站工作台" loading="lazy" decoding="async">
+  <img class="vibe-shot" data-src="images/figma-home/vibe-poster.png" style="left:988px;top:3332px;width:743px;height:383px" alt="海报模板工坊" loading="lazy" decoding="async">
   <div class="vibe-title">Vibecoding project</div>
   <div class="vibe-pill" style="left:351px;top:3744px;width:311px">人物造型生成网站</div>
   <div class="vibe-pill" style="left:1140px;top:3744px;width:311px">人物造型生成网站</div>
@@ -236,7 +233,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
     <div class="wc-desc">节奏、转场与镜头语言共同构建可被记住的动态体验。</div>
   </div>
   <footer class="foot">
-    <img data-src="images/figma-home/lower-footer.webp" alt="" loading="lazy" decoding="async">
+    <img data-src="images/figma-home/lower-footer.png" alt="" loading="lazy" decoding="async">
     <div class="foot-gx">gongxun</div>
     <div class="foot-contact">联系我
 TEL: 113975176591
@@ -638,44 +635,38 @@ requestAnimationFrame(loop);
   const layer=document.getElementById('sceneLayer');
   const D='images/figma-home/scene/';
   const L=[
-    ['grass.webp',1015.3,413.1,812.0,266.5,1,null],
-    ['board-cyan.webp',1020.6,139.0,342.5,370.0,2,-16],
-    ['board-green.webp',1434.6,112.4,381.5,389.5,3,16],
-    ['icon-capcut.webp',1220.7,84.4,389.5,389.5,4,null],
-    ['icon-peach.webp',1570.2,66.6,118.0,118.0,5,70],
-    ['icon-yellow.webp',1079.5,46.9,170.0,170.0,5,-70],
-    ['pole.webp',1528.3,253.4,147.5,266.0,6,null],
-    ['girl-loop-transparent.webp',1107.9,219.2,285.5,285.5,7,null],
+    ['grass.png',1015.3,413.1,812.0,266.5,1,null],
+    ['board-cyan.png',1020.6,139.0,342.5,370.0,2,-16],
+    ['board-green.png',1434.6,112.4,381.5,389.5,3,16],
+    ['icon-capcut.png',1220.7,84.4,389.5,389.5,4,null],
+    ['icon-peach.png',1570.2,66.6,118.0,118.0,5,70],
+    ['icon-yellow.png',1079.5,46.9,170.0,170.0,5,-70],
+    ['pole.png',1528.3,253.4,147.5,266.0,6,null],
+    ['girl-loop-transparent.gif',1107.9,219.2,285.5,285.5,7,null],
   ];
   const PX=1415.25,PY=311.25;
   const fans=[];
-  let loaded=false;
-  function loadScene(){
-    if(loaded)return;
-    loaded=true;
-    L.forEach(([f,x,y,w,h,z,spin])=>{
-      const im=document.createElement('img');
-      im.className='scene-img'+(spin!==null?' scene-fan':'');
-      im.loading='lazy';im.decoding='async';
-      im.src=D+f+'?v=20260920-perf';im.alt='';im.draggable=false;
-      im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
-      layer.appendChild(im);
-      if(spin!==null){
-        const ox=PX-(x+w/2),oy=PY-(y+h/2);
-        const icon=Math.abs(spin)===70;
-        im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
-        im._tOpen='translate(0,0) rotate(0deg) scale(1)';
-        im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
-        im.style.transition='none';
-        im.style.transform=im._tOpen;
-        fans.push(im);
-      }
-    });
-  }
+  L.forEach(([f,x,y,w,h,z,spin])=>{
+    const im=document.createElement('img');
+    im.className='scene-img'+(spin!==null?' scene-fan':'');
+    im.loading='eager';im.decoding='async';
+    im.src=D+f+(f==='grass.png'?'?v=20260920-user-grass':'?v=20260920-motion');im.alt='';im.draggable=false;
+    im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
+    layer.appendChild(im);
+    if(spin!==null){
+      const ox=PX-(x+w/2),oy=PY-(y+h/2);
+      const icon=Math.abs(spin)===70;
+      im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
+      im._tOpen='translate(0,0) rotate(0deg) scale(1)';
+      im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
+      im.style.transition='none';
+      im.style.transform=im._tOpen;
+      fans.push(im);
+    }
+  });
   const hit=document.getElementById('sceneHit');
   let replaying=false;
   function replayScene(){
-    loadScene();
     if(replaying)return;
     replaying=true;
     fans.forEach(im=>{im.style.transition='none';im.style.transform=im._tCollapsed;});
@@ -686,14 +677,6 @@ requestAnimationFrame(loop);
   }
   hit.addEventListener('pointerenter',replayScene);
   hit.addEventListener('focusin',replayScene);
-  const directProfile=new URLSearchParams(location.search).get('screen')==='2';
-  if(directProfile)loadScene();
-  else new IntersectionObserver((entries,observer)=>{
-    if(entries.some(entry=>entry.isIntersecting)){
-      loadScene();
-      observer.disconnect();
-    }
-  },{rootMargin:'300px 0px'}).observe(document.querySelector('.profile-composition'));
 })();
 </script>
 <script>
