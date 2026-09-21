@@ -782,7 +782,7 @@ requestAnimationFrame(loop);
     {id:'iu',z:2,pdf:'mandi.pdf',title:'Māndi 公交盲盒 APP · UI 设计',parts:[
       ['iu-card.png',690.0,2351.9,265.0,281.9],
       ['iu.png',706.2,2399.9,236.0,214.0]]},
-    {id:'cloud',z:3,pdf:'capcut-commercial.pdf?v=20260921-new',title:'剪映商业化设计作品',parts:[
+    {id:'cloud',z:3,pdf:'capcut-commercial.pdf?v=20260921-new2',title:'剪映商业化设计作品',parts:[
       ['cloud-body.png',878.0,2393.0,322.0,323.0],
       ['cloud-inner.png',938.0,2454.0,203.0,203.0]]},
     {id:'teacher',z:4,pdf:'teachers-day.pdf',title:'美团 · 教师节活动设计「点亮成长，聚光同行」',parts:[
@@ -857,7 +857,7 @@ requestAnimationFrame(loop);
     if(!doc){
       try{
         const pdfjs=await loadPdfJs();
-        doc=await pdfjs.getDocument({url:'pdfs/'+file,disableRange:true,disableStream:true}).promise;
+        doc=await pdfjs.getDocument({url:'pdfs/'+file,rangeChunkSize:262144}).promise;
       }catch(err){
         if(token!==pdfToken)return;
         pdfScroll.innerHTML='';
@@ -907,7 +907,8 @@ requestAnimationFrame(loop);
     const io=new IntersectionObserver(es=>{
       es.forEach(en=>{if(en.isIntersecting){io.unobserve(en.target);drawPage(en.target);}});
     },{root:pdfScroll,rootMargin:'500px 0px'});
-    pages.forEach(p=>io.observe(p.el));
+    if(pages[0])drawPage(pages[0].el);
+    pages.slice(1).forEach(p=>io.observe(p.el));
   }
   function openPdf(file,title){
     pdfTitle.textContent=title;
