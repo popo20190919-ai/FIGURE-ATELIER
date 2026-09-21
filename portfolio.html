@@ -198,7 +198,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <div class="garden-label" style="left:1232px;top:2236px;width:203px"><div class="zh">品牌设计作品</div><div class="en">Internship design work</div></div>
   <div class="garden-label" style="left:1534px;top:2386px;width:148px"><div class="zh">IP设计作品</div><div class="en">IP Design Works</div></div>
   <div class="vibe-blank"></div>
-  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.png?v=20260921" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成平台工作台" loading="lazy" decoding="async">
+  <img class="vibe-shot" src="images/figma-home/vibe-studio.png?v=20260921" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成平台工作台" decoding="async">
   <img class="vibe-shot" data-src="images/figma-home/vibe-poster.png" style="left:988px;top:3332px;width:743px;height:383px" alt="模版替换网站工作台" loading="lazy" decoding="async">
   <div class="vibe-title"><span class="section-title-icon">🥣</span><span class="section-title-text">Vibecoding project</span></div>
   <div class="vibe-pill" style="left:351px;top:3744px;width:311px">人物造型生成平台</div>
@@ -722,12 +722,19 @@ requestAnimationFrame(loop);
     loading=Promise.all(images.map(im=>{
       im.loading='eager';
       if(im.dataset.src){im.src=im.dataset.src;im.removeAttribute('data-src');}
-      if(im.complete&&im.naturalWidth)return im.decode?im.decode().catch(()=>{}):Promise.resolve();
       return new Promise(resolve=>{
-        im.addEventListener('load',resolve,{once:true});
+        const decoded=()=>{
+          if(!im.decode){resolve();return;}
+          Promise.race([
+            im.decode().catch(()=>{}),
+            new Promise(done=>setTimeout(done,300))
+          ]).then(resolve);
+        };
+        if(im.complete&&im.naturalWidth){decoded();return;}
+        im.addEventListener('load',decoded,{once:true});
         im.addEventListener('error',resolve,{once:true});
-      }).then(()=>im.decode?im.decode().catch(()=>{}):undefined);
-    })).then(()=>{ready=true;requestAnimationFrame(()=>{if(inView&&!played)drop();});});
+      });
+    })).then(()=>{ready=true;if(inView&&!played)drop();});
     return loading;
   }
   function drop(){
@@ -743,18 +750,14 @@ requestAnimationFrame(loop);
     });
   }
   const target=document.querySelector('.collage-blank');
-  let ticking=false;
   function checkPosition(){
-    ticking=false;
     const r=target.getBoundingClientRect();
     inView=r.bottom>-220&&r.top<innerHeight+450;
     if(inView){loadPieces();if(ready)drop();}
   }
-  addEventListener('scroll',()=>{
-    if(!ticking){ticking=true;requestAnimationFrame(checkPosition);}
-  },{passive:true});
+  addEventListener('scroll',checkPosition,{passive:true});
   addEventListener('resize',checkPosition,{passive:true});
-  requestAnimationFrame(checkPosition);
+  checkPosition();
 })();
 </script>
 <script>
