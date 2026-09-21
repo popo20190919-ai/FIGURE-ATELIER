@@ -64,7 +64,7 @@ body.detail-on .detail-panel{opacity:1;transform:none}
 .profile-composition{position:absolute;left:0;top:1200px;width:1920px;height:700px;overflow:hidden;background:#fff;z-index:4;color:#969696}
 .profile-copy-img{position:absolute;left:117px;top:84px;width:714px;height:533px;z-index:2}
 .collage-blank{position:absolute;left:-80px;top:302px;width:2080px;height:784px;background:#fff;z-index:2}
-.piece-wrap{position:absolute;left:0;top:0;z-index:3;will-change:transform;pointer-events:auto;-webkit-user-drag:none}
+.piece-wrap{position:absolute;left:0;top:0;z-index:3;will-change:transform;backface-visibility:hidden;transform-style:preserve-3d;contain:layout paint;pointer-events:auto;-webkit-user-drag:none}
 .piece{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;-webkit-user-drag:none;user-select:none}
 .pc-gray{filter:grayscale(1)}
 .pc-color{opacity:0;transition:opacity .35s ease}
@@ -161,7 +161,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <img class="sec1" data-src="images/figma-home/lower-sec1.png" alt="" loading="lazy" decoding="async">
   <img class="sec2" data-src="images/figma-home/lower-sec2.png" alt="" loading="lazy" decoding="async">
   <section class="profile-composition" id="profile" aria-label="个人简介">
-    <img class="profile-copy-img" data-src="images/figma-home/profile-copy.png?v=20260920" alt="龚珣个人简介" loading="lazy" decoding="async">
+    <img class="profile-copy-img" src="images/figma-home/profile-copy-hd.png?v=20260921" alt="龚珣个人简介" decoding="async">
     <div id="sceneLayer"></div>
     <div class="scene-hit" id="sceneHit" tabindex="0" aria-label="右侧动态场景"></div>
   </section>
@@ -198,7 +198,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <div class="garden-label" style="left:1232px;top:2236px;width:203px"><div class="zh">品牌设计作品</div><div class="en">Internship design work</div></div>
   <div class="garden-label" style="left:1534px;top:2386px;width:148px"><div class="zh">IP设计作品</div><div class="en">IP Design Works</div></div>
   <div class="vibe-blank"></div>
-  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.png" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成平台工作台" loading="lazy" decoding="async">
+  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.png?v=20260921" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成平台工作台" loading="lazy" decoding="async">
   <img class="vibe-shot" data-src="images/figma-home/vibe-poster.png" style="left:988px;top:3332px;width:743px;height:383px" alt="模版替换网站工作台" loading="lazy" decoding="async">
   <div class="vibe-title"><span class="section-title-icon">🥣</span><span class="section-title-text">Vibecoding project</span></div>
   <div class="vibe-pill" style="left:351px;top:3744px;width:311px">人物造型生成平台</div>
@@ -704,42 +704,57 @@ requestAnimationFrame(loop);
     ['p11.png',1592.8,633.2,312.5,312.5],
     ['p13.png',135.3,402.1,361.4,312.1],
   ];
-  const elds=P.map(([f,x0,y0,w,h,cf])=>{
+  const images=[];
+  const elds=P.map(([f,x0,y0,w,h,cf],i)=>{
     const wrap=document.createElement('div');
     wrap.className='piece-wrap';wrap.style.width=w+'px';wrap.style.height=h+'px';
     const g=document.createElement('img');g.className='piece pc-gray';g.loading='lazy';g.decoding='async';g.dataset.src=DIR+f;
     const c=document.createElement('img');c.className='piece pc-color';c.loading='lazy';c.decoding='async';c.dataset.src=DIR+(cf||f);
+    images.push(g,c);
     wrap.appendChild(g);wrap.appendChild(c);layer.appendChild(wrap);
-    const sx=x0+(Math.random()-0.5)*120,sy=-h-250-Math.random()*500,sr=(Math.random()-0.5)*140;
+    const sx=x0+((i%5)-2)*24,sy=-h-330-(i%4)*105,sr=((i*37)%120)-60;
     wrap.style.transform=`translate(${sx}px,${sy}px) rotate(${sr}deg)`;
     return {wrap,x0,y0,sx,sy,sr};
   });
-  let played=false;
-  function reset(){
-    elds.forEach(e=>{e.wrap.getAnimations().forEach(a=>a.cancel());e.wrap.style.transform=`translate(${e.sx}px,${e.sy}px) rotate(${e.sr}deg)`;});
-    played=false;
+  let played=false,ready=false,inView=false,loading;
+  function loadPieces(){
+    if(loading)return loading;
+    loading=Promise.all(images.map(im=>{
+      im.loading='eager';
+      if(im.dataset.src){im.src=im.dataset.src;im.removeAttribute('data-src');}
+      if(im.complete&&im.naturalWidth)return im.decode?im.decode().catch(()=>{}):Promise.resolve();
+      return new Promise(resolve=>{
+        im.addEventListener('load',resolve,{once:true});
+        im.addEventListener('error',resolve,{once:true});
+      }).then(()=>im.decode?im.decode().catch(()=>{}):undefined);
+    })).then(()=>{ready=true;requestAnimationFrame(()=>{if(inView&&!played)drop();});});
+    return loading;
   }
   function drop(){
+    if(!ready||played)return;
     played=true;
     elds.forEach((e,i)=>{
       e.wrap.animate([
-        {transform:`translate(${e.sx}px,${e.sy}px) rotate(${e.sr}deg)`,easing:'cubic-bezier(.5,.02,.8,.4)'},
-        {transform:`translate(${e.x0}px,${e.y0+30}px) rotate(10deg)`,offset:.74},
-        {transform:`translate(${e.x0}px,${e.y0-12}px) rotate(-3deg)`,offset:.9,easing:'cubic-bezier(.3,.7,.4,1.35)'},
+        {transform:`translate3d(${e.sx}px,${e.sy}px,0) rotate(${e.sr}deg)`},
+        {transform:`translate3d(${e.x0}px,${e.y0+24}px,0) rotate(8deg)`,offset:.78},
+        {transform:`translate3d(${e.x0}px,${e.y0-9}px,0) rotate(-2deg)`,offset:.91},
         {transform:`translate(${e.x0}px,${e.y0}px) rotate(0deg)`,offset:1}
-      ],{duration:850+Math.random()*300,delay:i*130+Math.random()*120,fill:'forwards'});
+      ],{duration:980,delay:i*75,easing:'cubic-bezier(.22,.72,.24,1)',fill:'forwards'});
     });
   }
-  let t;
+  const target=document.querySelector('.collage-blank');
+  let ticking=false;
+  function checkPosition(){
+    ticking=false;
+    const r=target.getBoundingClientRect();
+    inView=r.bottom>-220&&r.top<innerHeight+450;
+    if(inView){loadPieces();if(ready)drop();}
+  }
   addEventListener('scroll',()=>{
-    clearTimeout(t);
-    t=setTimeout(()=>{
-      const ih=innerHeight,sc=Math.min(innerWidth/1920,1);
-      const on2=scrollY>=ih*0.6&&scrollY<ih+1002*sc*0.55;
-      if(on2&&!played)drop();
-      else if(!on2&&played)reset();
-    },120);
-  });
+    if(!ticking){ticking=true;requestAnimationFrame(checkPosition);}
+  },{passive:true});
+  addEventListener('resize',checkPosition,{passive:true});
+  requestAnimationFrame(checkPosition);
 })();
 </script>
 <script>
