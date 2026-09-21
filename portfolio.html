@@ -560,7 +560,10 @@ const PAGE_H=1002,LOWER_PAGES=6,LOWER_H=5558;
 function snapPoints(){
   const sc=Math.min(innerWidth/1920,1),ih=innerHeight,max=LOWER_H*sc;
   const raw=[0];
-  for(let j=1;j<LOWER_PAGES;j++)raw.push(Math.min(ih+(j-1)*PAGE_H*sc,max));
+  for(let j=1;j<LOWER_PAGES;j++){
+    const lift=(j===1||j===2)?110*sc:0;
+    raw.push(Math.min(ih+(j-1)*PAGE_H*sc+lift,max));
+  }
   raw.push(max);
   const thr=PAGE_H*sc*0.5;
   const out=[];
