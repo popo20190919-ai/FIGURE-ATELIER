@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-store,no-cache,must-revalidate">
 <title>gongxun · PORTFOLIO</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="image" href="images/figma-home/portfolio-bg.jpg" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden;background:#fff}
@@ -161,7 +158,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <img class="sec1" data-src="images/figma-home/lower-sec1.png" alt="" loading="lazy" decoding="async">
   <img class="sec2" data-src="images/figma-home/lower-sec2.png" alt="" loading="lazy" decoding="async">
   <section class="profile-composition" id="profile" aria-label="个人简介">
-    <img class="profile-copy-img" src="images/figma-home/profile-copy-hd.png?v=20260921" alt="龚珣个人简介" decoding="async">
+    <img class="profile-copy-img" data-src="images/figma-home/profile-copy-hd.png?v=20260921" alt="龚珣个人简介" loading="lazy" decoding="async">
     <div id="sceneLayer"></div>
     <div class="scene-hit" id="sceneHit" tabindex="0" aria-label="右侧动态场景"></div>
   </section>
@@ -198,7 +195,7 @@ html.pdf-lock,body.pdf-lock{overflow:hidden}
   <div class="garden-label" style="left:1232px;top:2236px;width:203px"><div class="zh">品牌设计作品</div><div class="en">Internship design work</div></div>
   <div class="garden-label" style="left:1534px;top:2386px;width:148px"><div class="zh">IP设计作品</div><div class="en">IP Design Works</div></div>
   <div class="vibe-blank"></div>
-  <img class="vibe-shot" src="images/figma-home/vibe-studio.png?v=20260921" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成平台工作台" decoding="async">
+  <img class="vibe-shot" data-src="images/figma-home/vibe-studio.png?v=20260921" style="left:181px;top:3332px;width:741px;height:383px" alt="人物造型生成平台工作台" loading="lazy" decoding="async">
   <img class="vibe-shot" data-src="images/figma-home/vibe-poster.png" style="left:988px;top:3332px;width:743px;height:383px" alt="模版替换网站工作台" loading="lazy" decoding="async">
   <div class="vibe-title"><span class="section-title-icon">🥣</span><span class="section-title-text">Vibecoding project</span></div>
   <div class="vibe-pill" style="left:351px;top:3744px;width:311px">人物造型生成平台</div>
@@ -252,6 +249,15 @@ E-MAIL: 13875176591@163.COM
 </main>
 <script>
 (function(){
+  function loadDisplayFont(){
+    var link=document.createElement('link');
+    link.rel='stylesheet';
+    link.href='https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap';
+    document.head.appendChild(link);
+  }
+  if(document.readyState==='complete')loadDisplayFont();
+  else addEventListener('load',loadDisplayFont,{once:true});
+
   var io=new IntersectionObserver(function(es){
     es.forEach(function(en){
       if(en.isIntersecting){
@@ -655,24 +661,36 @@ requestAnimationFrame(loop);
   ];
   const PX=1415.25,PY=311.25;
   const fans=[];
-  L.forEach(([f,x,y,w,h,z,spin])=>{
-    const im=document.createElement('img');
-    im.className='scene-img'+(spin!==null?' scene-fan':'');
-    im.loading='eager';im.decoding='async';
-    im.src=D+f+(f==='grass.png'?'?v=20260920-user-grass':'?v=20260920-motion');im.alt='';im.draggable=false;
-    im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
-    layer.appendChild(im);
-    if(spin!==null){
-      const ox=PX-(x+w/2),oy=PY-(y+h/2);
-      const icon=Math.abs(spin)===70;
-      im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
-      im._tOpen='translate(0,0) rotate(0deg) scale(1)';
-      im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
-      im.style.transition='none';
-      im.style.transform=im._tOpen;
-      fans.push(im);
-    }
-  });
+  let initialized=false;
+  function initScene(){
+    if(initialized)return;
+    initialized=true;
+    L.forEach(([f,x,y,w,h,z,spin])=>{
+      const im=document.createElement('img');
+      im.className='scene-img'+(spin!==null?' scene-fan':'');
+      im.loading='eager';im.decoding='async';
+      im.src=D+f+(f==='grass.png'?'?v=20260920-user-grass':'?v=20260920-motion');im.alt='';im.draggable=false;
+      im.style.left=x+'px';im.style.top=y+'px';im.style.width=w+'px';im.style.height=h+'px';im.style.zIndex=z;
+      layer.appendChild(im);
+      if(spin!==null){
+        const ox=PX-(x+w/2),oy=PY-(y+h/2);
+        const icon=Math.abs(spin)===70;
+        im._tCollapsed='translate('+ox+'px,'+oy+'px) rotate('+spin+'deg) scale(0)';
+        im._tOpen='translate(0,0) rotate(0deg) scale(1)';
+        im._trOpen=icon?'transform .6s cubic-bezier(.34,1.56,.64,1) .16s':'transform .7s cubic-bezier(.34,1.56,.64,1)';
+        im.style.transition='none';
+        im.style.transform=im._tOpen;
+        fans.push(im);
+      }
+    });
+  }
+  function checkScene(){
+    const r=document.getElementById('profile').getBoundingClientRect();
+    if(r.top<innerHeight+300&&r.bottom>-300)initScene();
+  }
+  addEventListener('scroll',checkScene,{passive:true});
+  if(document.readyState==='complete')initScene();
+  else addEventListener('load',initScene,{once:true});
   const hit=document.getElementById('sceneHit');
   let replaying=false;
   function replayScene(){
@@ -762,7 +780,8 @@ requestAnimationFrame(loop);
   }
   addEventListener('scroll',checkPosition,{passive:true});
   addEventListener('resize',checkPosition,{passive:true});
-  checkPosition();
+  if(document.readyState==='complete')checkPosition();
+  else addEventListener('load',checkPosition,{once:true});
 })();
 </script>
 <script>
